@@ -3,7 +3,7 @@ const Cryptr = require('cryptr');
 
 const cryptr = new Cryptr('secretKey');
 
-exports.addUser = user => new Promise((resolve) => {
+exports.generateUserID = user => new Promise((resolve) => {
   const username = user.data.formOne.username;
   const password = user.data.formOne.password;
   const decryptPassword = atob(password);

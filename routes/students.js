@@ -1,9 +1,11 @@
 const express = require('express');
 
 const router = express.Router();
-const studentModel = require('../models/student-model');
+
 const pdsModel = require('../models/personal-data-sheet-model');
+
 const userModel = require('../models/user-model');
+const studentModel = require('../models/student-model');
 const addressModel = require('../models/address-model');
 
 function sendResponse(success, message) {
@@ -29,7 +31,7 @@ router.post('/', (req, res) => {
       }
 
       // Adds student to DB
-      userModel.addUser(req.body).then((userId) => {
+      userModel.generateUserID(req.body).then((userId) => {
         if (typeof pdsID !== 'undefined' && typeof userId !== 'undefined') {
           const addStudent = studentModel.create(req.body, pdsID, userId);
           addStudent.then((response) => {

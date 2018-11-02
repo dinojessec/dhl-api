@@ -1,4 +1,4 @@
-exports.generateID = () => new Promise((resolve) => {
+exports.generateID = () => {
   const sql = 'INSERT INTO PersonalDataSheet VALUES (NULL)';
 
   connection.query(sql, (error, results) => {
@@ -8,11 +8,4 @@ exports.generateID = () => new Promise((resolve) => {
     }
     return null;
   });
-
-  connection.query(sql, (error, results) => {
-    if (typeof results !== 'undefined') {
-      resolve(results.insertId);
-    }
-    resolve({ success: false, message: error });
-  });
-});
+};
