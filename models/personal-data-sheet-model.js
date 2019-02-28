@@ -1,12 +1,13 @@
-const mysql = require('mysql')
-const connection =  mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME,
-  });
+const mysql = require('mysql');
 
-  connection.connect()
+const connection = mysql.createConnection({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME,
+});
+
+connection.connect();
 
 exports.generateID = new Promise((resolve) => {
   const sql = 'INSERT INTO PersonalDataSheet(PersonalDataSheetId) VALUES (NULL)';
@@ -19,5 +20,6 @@ exports.generateID = new Promise((resolve) => {
     }
     return null;
   });
-}).then(val => {return val})
-
+}).then((val) => {
+  return val;
+});
