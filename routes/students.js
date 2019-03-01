@@ -3,52 +3,39 @@ const express = require('express');
 const router = express.Router();
 
 const pdsModel = require('../models/personal-data-sheet-model');
-
-const userModel = require('../models/user-model');
 const studentModel = require('../models/student-model');
-const addressModel = require('../models/address-model');
+// const userModel = require('../models/user-model');
 
-function sendResponse(success, message) {
-  return { success, message };
-}
+
+// function getPdsID() {
+//   pdsModel.generateID().then((response) => {
+//     return response;
+//   });
+// }
+
+// function sendResponse(success, message) {
+//   return { success, message };
+// }
 
 // GET /students
 router.get('/', (req, res) => {
   res.json({
-    hello: 'world',
   });
 });
 
 // POST /students
 router.post('/', (req, res) => {
-  try {
-    pdsModel.generateID().then((dataSheetId) => {
-      const pdsID = dataSheetId;
+  const params = req.body;
+  const pdsId = pdsModel.generateID;
+  const studentID = studentModel.generateStudent(pdsId, params);
 
-      // Adds address of student to DB
-      if (typeof pdsID !== 'undefined') {
-        addressModel.addAddress(req.body, pdsID);
-      }
-
-      // Adds student to DB
-      userModel.generateUserID(req.body).then((userId) => {
-        if (typeof pdsID !== 'undefined' && typeof userId !== 'undefined') {
-          const addStudent = studentModel.create(req.body, pdsID, userId);
-          addStudent.then((response) => {
-            if (response.success) {
-              res.json(sendResponse(response.success, response.message));
-            } else {
-              res.json(sendResponse(response.success, response.message));
-            }
-            res.end();
-          });
-        }
-      });
-    });
-  } catch (e) {
-    res.json(sendResponse(false, 'Unknown error occured'));
-    res.end();
-  }
+  Promise.all([
+    pdsId,
+    studentID,
+  ]).then(data => console.log(data))
+  // console.log('params');
+  console.log(params);
+  console.log(studentID);
 });
 
 module.exports = router;
