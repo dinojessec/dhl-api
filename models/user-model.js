@@ -18,12 +18,13 @@ const user = {
 
       connection.query(sql, (error, results) => {
         if (typeof results !== 'undefined') {
-          const userId = results.insertId;
-          resolve(userId);
+          resolve(results.insertId);
+        } else {
+          throw error;
         }
-        return null;
+        // return null;
       });
-    // resolve(params);
+      // resolve(userName);
     });
   },
 };
