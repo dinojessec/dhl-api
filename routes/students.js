@@ -18,8 +18,8 @@ router.post('/', (req, res) => {
     const pdsId = pdsModelResult;
 
     userModel.generateUserID(params).then((userModelResult) => {
-    const userId = userModelResult;
-    
+      const userId = userModelResult;
+      
       studentModel.add(pdsId, userId, params).then((result) => {
         const resultData = result;
         console.log(pdsId);
