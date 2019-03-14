@@ -1,18 +1,20 @@
 const student = {
+  // function to check if NaN
+  checkifNaN(value) {
+    if (isNaN(value)) {
+      return `"${value}"`;
+    } else {
+      return `${value}`;
+    }
+  },
+
   add(pdsId, userId, params) {
     return new Promise((resolve) => {
       const input = params;
+      input.personlDataSheetId = pdsId;
+      input.userId = userId;
 
       let sql = `INSERT INTO student (`;
-
-      // function to check if NaN
-      function checkifNaN(value) {
-        if (isNaN(value)) {
-          return `"${value}"`;
-        } else {
-          return `${value}`;
-        }
-      };
 
       // columns
       const keys = Object.keys(input);
@@ -28,29 +30,28 @@ const student = {
         }
       }
 
-    sql += `) VALUES (`;
-    
-    // values
-    const values = Object.values(input);
-    const lastVal = values.length - 1;
+      sql += `) VALUES (`;
+      // values
+      const values = Object.values(input);
+      const lastVal = values.length - 1;
 
-    for (let i = 0; i <= lastVal; i++) {
-      const val = values[i];
-      if (val !== '') {
-        if(checkifNaN(val)) {
-          const newVal = checkifNaN(val);
-          if (i === lastVal) {
-            sql += `${newVal}`;
-          } else {
-            sql += `${newVal},`;
+      for (let i = 0; i <= lastVal; i++) {
+        const val = values[i];
+        if (val !== '') {
+          if (checkifNaN(val)) {
+            const newVal = checkifNaN(val);
+            if (i === lastVal) {
+              sql += `${newVal}`;
+            } else {
+              sql += `${newVal},`;
+            }
           }
         }
       }
-    }
-    
-    sql += `)`;
 
-    console.log(sql);
+      sql += `)`;
+
+      console.log(sql);
       resolve(input);
     });
   },
