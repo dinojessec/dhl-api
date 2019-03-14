@@ -54,6 +54,8 @@ const student = {
       sql += ')';
 
       console.log(sql);
+
+      // success alert and show next step
       // connection.query(sql, (error, results) => {
       //   if (typeof results !== 'undefined') {
       //     resolve(results.insertId);
