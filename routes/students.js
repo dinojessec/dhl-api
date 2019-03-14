@@ -22,6 +22,8 @@ router.post('/', (req, res) => {
     
       studentModel.add(pdsId, userId, params).then((result) => {
         const resultData = result;
+        console.log(pdsId);
+        console.log(userId);
         console.log(resultData);
 
       });
