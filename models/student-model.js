@@ -13,8 +13,8 @@ const student = {
       const input = params;
       input.personlDataSheetId = pdsId;
       input.userId = userId;
-      // delete input.username;
-      // delete input.password;
+      delete input.username;
+      delete input.password;
 
       let sql = 'INSERT INTO student (';
 
@@ -54,6 +54,13 @@ const student = {
       sql += ')';
 
       console.log(sql);
+      // connection.query(sql, (error, results) => {
+      //   if (typeof results !== 'undefined') {
+      //     resolve(results.insertId);
+      //   } else {
+      //     throw error;
+      //   }
+      // });
       resolve(input);
     });
   },

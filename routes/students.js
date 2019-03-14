@@ -22,12 +22,12 @@ router.post('/', (req, res) => {
       const userId = userModelResult;
       console.log(userId);
     
-    //   studentModel.add(pdsId, userId, params).then((result) => {
-    //     const resultData = result;
-    //     console.log(pdsId);
-    //     console.log(userId);
-    //     console.log(resultData);
-    //   });
+      studentModel.add(pdsId, userId, params).then((result) => {
+        const resultData = result;
+        console.log(pdsId);
+        console.log(userId);
+        console.log(resultData);
+      });
     });
   });
 });
