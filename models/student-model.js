@@ -14,7 +14,7 @@ const student = {
       input.personlDataSheetId = pdsId;
       input.userId = userId;
 
-      let sql = `INSERT INTO student (`;
+      let sql = 'INSERT INTO student (';
 
       // columns
       const keys = Object.keys(input);
@@ -30,7 +30,7 @@ const student = {
         }
       }
 
-      sql += `) VALUES (`;
+      sql += ') VALUES (';
       // values
       const values = Object.values(input);
       const lastVal = values.length - 1;
@@ -38,8 +38,8 @@ const student = {
       for (let i = 0; i <= lastVal; i++) {
         const val = values[i];
         if (val !== '') {
-          if (checkifNaN(val)) {
-            const newVal = checkifNaN(val);
+          if (student.checkifNaN(val)) {
+            const newVal = student.checkifNaN(val);
             if (i === lastVal) {
               sql += `${newVal}`;
             } else {
@@ -49,7 +49,7 @@ const student = {
         }
       }
 
-      sql += `)`;
+      sql += ')';
 
       console.log(sql);
       resolve(input);
