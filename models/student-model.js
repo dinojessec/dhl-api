@@ -1,76 +1,79 @@
-// exports.create = (params, pdsID, userId) => new Promise((resolve) => {
-// exports.create = (params, pdsID) => new Promise((resolve) => {
-  
-//   console.log('sql');
-//   console.log(sql);
+const student = {
+  add(pdsId, userId, params) {
+    const input = params;
 
-//   connection.query(sql, (error, results) => {
-//     if (typeof results !== 'undefined') {
-//       resolve({
-//         success: true,
-//         message: 'student successfully added',
-//         results,
-//       });
-//     }
-//     resolve({ success: false, message: error });
-//   });
-// });
-
-
-// const studentModel = {
-//   create(params) {
-//     console.log(params);
-//     console.log('params');
-//   },
+    let sql = `INSERT INTO student (`;
+// const params = {
+//   username: 'tupasjuanchob',
+// 	firstName: 'Juancho',
+// 	middleName: 'B',
+// 	lastName: 'Tupas',
+// 	password: '123456',
+// 	ALS: 'Yes',
+// 	PEPT: 'Yes',
+// 	NC: 'Yes',
+// 	gradeLevel: 'Grade11',
+// 	LRN: '234',
+// 	birthday: '2019-03-22',
+// 	placeOfBirth: 'Marikina',
+// 	sex: 'Male',
+// 	mobileNumber: '09172222222',
+// 	guardian: '',
+// 	motherTongue: 'Filipino',
+// 	religion: 'Iglesia ni cristo',
+// 	ethnicGroup: 'Manileno'
 // };
 
-const mysql = require('mysql');
-
-const connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME,
-});
-
-connection.connect();
-
-exports.generateStudent = (params, pdsId) => {
-  return new Promise((resolve) => {
-    const year = new Date().getFullYear();
-
-    const sql = `
-          INSERT INTO student
-          (
-            studentTableId, studentId, personalDataSheetId,
-            strandId, lrn, firstName,
-            middleName, lastName, mobileNumber,
-            landlineNumber, email, religion,
-            guardian, birthday, gender,
-            motherTongue, ethnicGroup, userId,
-            status, facebook, instagram,
-            placeOfBirth, gradeLevel
-          )
-          VALUES
-          (
-            "(NULL)", "${year}", "${pdsId}",
-            "(NULL)", "${params.data.formOne.LRN}", "${params.data.formOne.firstName}",
-            "${params.data.formOne.middleName}", "${params.data.formOne.lastName}", "${params.data.formOne.mobileNumber}",
-            "${params.data.formOne.landlineNumber}", "${params.data.formOne.email}", "${params.data.formOne.religion}",
-            "${params.data.formOne.guardian}", "${params.data.formOne.birthday}", "${params.data.formOne.gender}",
-            "${params.data.formOne.motherTongue}", "${params.data.formOne.ethnicGroup}", "(NULL)",
-            "Pending", "${params.data.formOne.facebook}", "${params.data.formOne.instagram}",
-            "${params.data.formOne.placeOfBirth}", "${params.data.formOne.gradeLevel}"
-          );
-          `;
-
-    connection.query(sql, (error, results) => {
-      if (typeof results !== 'undefined') {
-        const studentModelId = results.insertId;
-        resolve(studentModelId);
+    // function to check if NaN
+    function checkifNaN(value) {
+      if (isNaN(value)) {
+        return `"${value}"`;
+      } else {
+        return `${value}`;
       }
+    };
+
+      // columns
+    let keys = Object.keys(input);
+    let end = keys.length - 1;
+    for (let i = 0; i <= end; i++) {
+      let key = keys[i];
+        if (key !== '') {
+          if (i === end) {
+            sql += `${key}`;
+          } else {
+            sql += `${key},`;
+          }  
+        }
+    }
+
+    sql += `) VALUES (`;
+
+    // values
+    let values = Object.values(input);
+    let lastVal = values.length - 1;
+
+    for (let i = 0; i <= lastVal; i++) {
+      let val = values[i];
+      if (val !== '') {
+        if(checkifNaN(val)) {
+          let newVal = checkifNaN(val);
+          if (i === lastVal) {
+            sql += `${newVal}`;
+          } else {
+            sql += `${newVal},`;
+          } 
+        }
+      }
+    }
+
+    sql += `)`;
+
+    console.log(sql);
+    return new Promise((resolve) => {
+      resolve(input);
     });
-  }).then((val) => {
-    return val;
-  }).catch(error => console.log('found error', error));
+  },
 };
+
+module.exports = student;
