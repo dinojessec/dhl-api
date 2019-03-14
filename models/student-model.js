@@ -13,6 +13,8 @@ const student = {
       const input = params;
       input.personlDataSheetId = pdsId;
       input.userId = userId;
+      // delete input.username;
+      // delete input.password;
 
       let sql = 'INSERT INTO student (';
 
