@@ -16,17 +16,20 @@ router.post('/', (req, res) => {
   // console.log(test);
   pdsModel.generateID().then((pdsModelResult) => {
     const pdsId = pdsModelResult;
-    console.log(pdsId);
+    // console.log(pdsId);
 
     userModel.generateUserID(params).then((userModelResult) => {
       const userId = userModelResult;
-      console.log(userId);
-    
+      // console.log(userId);
       studentModel.add(pdsId, userId, params).then((result) => {
         const resultData = result;
         console.log(pdsId);
         console.log(userId);
         console.log(resultData);
+
+        // if (pdsId === true && userId === true && resultData === true) {
+          res.json({ message: 'success' });
+        // }
       });
     });
   });

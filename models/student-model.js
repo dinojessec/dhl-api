@@ -53,7 +53,7 @@ const student = {
 
       sql += ')';
 
-      console.log(sql);
+      // console.log(sql);
 
       // success alert and show next step
       // connection.query(sql, (error, results) => {
@@ -63,7 +63,7 @@ const student = {
       //     throw error;
       //   }
       // });
-      resolve(input);
+      resolve(true);
     });
   },
 };
