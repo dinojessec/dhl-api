@@ -27,9 +27,11 @@ router.post('/', (req, res) => {
         console.log(userId);
         console.log(resultData);
 
-        // if (pdsId === true && userId === true && resultData === true) {
+        if (pdsId === true && userId === true && resultData === true) {
           res.json({ message: 'success' });
-        // }
+        } else {
+          res.json({ message: 'fail' });
+        }
       });
     });
   });
