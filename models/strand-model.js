@@ -1,15 +1,17 @@
-const db = require('../routes/connection');
+const strand = {
+  generateStrand() {
+    return new Promise((resolve) => {
+      const sql = 'SELECT * FROM dhl_db.strand;';
 
-exports.getStrandList = () => {
-  return new Promise((resolve, reject) => {
-    const sql = 'SELECT * FROM dhl_db.strand;';
-    db.connection.query(sql, (result) => {
-      if (typeof result !== 'undefined') {
-        const strandList = result;
-        resolve(strandList);
-      } else {
-        reject(error => console.log(error));
-      }
+      connection.query(sql, (error, results) => {
+        if (typeof results !== 'undefined') {
+          resolve(results);
+        } else {
+          throw error;
+        }
+      });
     });
-  }).then((val) => { return val; });
+  },
 };
+
+module.exports = strand;
