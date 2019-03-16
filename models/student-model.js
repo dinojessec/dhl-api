@@ -11,8 +11,9 @@ const student = {
   add(pdsId, userId, params) {
     return new Promise((resolve) => {
       const input = params;
-      input.personlDataSheetId = pdsId;
+      input.personalDataSheetId = pdsId;
       input.userId = userId;
+      input.studentId = (null);
       delete input.username;
       delete input.password;
 
@@ -53,17 +54,15 @@ const student = {
 
       sql += ')';
 
-      // console.log(sql);
-
-      // success alert and show next step
-      // connection.query(sql, (error, results) => {
-      //   if (typeof results !== 'undefined') {
-      //     resolve(results.insertId);
-      //   } else {
-      //     throw error;
-      //   }
-      // });
-      resolve(true);
+      console.log(sql);
+      connection.query(sql, (error, results) => {
+        if (typeof results !== 'undefined') {
+          resolve(results.insertId);
+        } else {
+          throw error;
+        }
+      });
+      // resolve(true);
     });
   },
 };
