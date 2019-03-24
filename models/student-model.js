@@ -19,6 +19,10 @@ const student = {
       const decryptPassword = atob(input.password);
       const encryptedPassword = cryptr.encrypt(decryptPassword);
 
+      // const studentInput = {
+
+      // };
+
       const queryPdsID = 'INSERT INTO PersonalDataSheet(PersonalDataSheetId) VALUES (NULL);';
       const queryUserID = `INSERT INTO user (userId, username, password) 
       VALUES (NULL, "${input.username}", "${encryptedPassword}");`;

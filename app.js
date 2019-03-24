@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const createError = require('http-errors');
 const express = require('express');
+// const session = require('express-session');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
@@ -22,7 +23,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // custom codes below
 
+// session
+// app.use(session({
+//   cookie: {}
+// }));
+
 const students = require('./routes/students');
+const profile = require('./routes/profile');
 
 // uncomment after placing your favicon in /public
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -42,7 +49,7 @@ app.use((req, res, next) => {
 
 app.use((req, res, next) => {
   global.connection = mysql.createConnection({
-    multipleStatements: true,
+    // multipleStatements: true,
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASS,
@@ -54,8 +61,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/', indexRouter);
+app.use('/api/v1/', indexRouter);
 app.use('/api/v1/students', students);
+app.use('/api/v1/profile', profile);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
