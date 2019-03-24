@@ -4,7 +4,6 @@ const router = express.Router();
 
 const profileModel = require('../models/profile-model');
 
-
 router.get('/', (req, res, next) => {
   profileModel
     .getStudentInfo()
