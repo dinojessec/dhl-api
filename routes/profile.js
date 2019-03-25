@@ -4,7 +4,8 @@ const router = express.Router();
 
 const profileModel = require('../models/profile-model');
 
-router.get('/', (req, res, next) => {
+// add :ID as part of the route to specify what student needed to pull up
+router.get('/', (req, res) => {
   profileModel
     .getStudentInfo()
     .then((studentQuery) => {
@@ -15,5 +16,6 @@ router.get('/', (req, res, next) => {
       console.log(err);
     });
 });
+
 
 module.exports = router;
