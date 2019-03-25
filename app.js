@@ -31,6 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const students = require('./routes/students');
 const profile = require('./routes/profile');
+const login = require('./routes/login');
 
 // uncomment after placing your favicon in /public
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -65,6 +66,7 @@ app.use((req, res, next) => {
 app.use('/api/v1/', indexRouter);
 app.use('/api/v1/students', students);
 app.use('/api/v1/profile', profile);
+app.use('/api/v1/login', login);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
