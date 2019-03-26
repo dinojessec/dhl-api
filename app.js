@@ -29,7 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //   cookie: {}
 // }));
 
-const students = require('./routes/students');
+const register = require('./routes/register');
 const profile = require('./routes/profile');
 const login = require('./routes/login');
 
@@ -64,7 +64,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/v1/', indexRouter);
-app.use('/api/v1/students', students);
+app.use('/api/v1/register', register);
 app.use('/api/v1/profile', profile);
 app.use('/api/v1/login', login);
 
