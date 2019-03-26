@@ -8,9 +8,8 @@ const student = {
   checkifNaN(value) {
     if (isNaN(value)) {
       return `"${value}"`;
-    } else {
-      return `${value}`;
     }
+    return `${value}`;
   },
 
   add(params) {
@@ -38,9 +37,9 @@ const student = {
             } else {
               const pdsID = result.insertId;
               // get userID query
-              connection.query(queryUserID, (error, result) => {
+              connection.query(queryUserID, (errors, result) => {
                 if (error) {
-                  throw error;
+                  console.log('error in query', errors);
                 } else {
                   const userID = result.insertId;
                   // add pdsID and userID on the checking if NaN
@@ -89,10 +88,10 @@ const student = {
                   console.log(sql);
                   console.log(pdsID);
                   console.log(userID);
+                  console.log(input);
                   connection.query(sql, (err, result) => {
                     if (err) {
                       connection.rollback();
-                      reject(new Error('Fail'));
                     } else {
                       connection.commit();
                       resolve(result.insertId);

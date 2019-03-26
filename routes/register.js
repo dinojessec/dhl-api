@@ -17,14 +17,17 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => {
   const params = req.body;
 
-  studentModel.add(params).then((result) => {
-    if (result !== 'undefined') {
-      res.json({ message: 'success' });
-    }
-  }).catch((err) => {
-    console.log(err);
-    res.json({ message: 'fail' });
-  });
+  studentModel
+    .add(params)
+    .then((result) => {
+      if (result !== 'undefined') {
+        res.json({ message: 'success' });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.json({ message: "fail. there's something wrong with the query" });
+    });
 });
 
 module.exports = router;

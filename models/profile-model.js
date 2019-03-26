@@ -1,6 +1,6 @@
 const studentProfile = {
   getStudentInfo() {
-    const testID = 32;
+    const testID = 18;
     return new Promise((resolve, reject) => {
       const sql = `SELECT * FROM user
                           LEFT JOIN student 
