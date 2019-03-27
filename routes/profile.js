@@ -25,5 +25,10 @@ router.get('/', (req, res) => {
   });
 });
 
+router.post('/', (req, res) => {
+  const updatedInput = req.body;
+  console.log(updatedInput);
+  console.log(updatedInput.personalDataSheetId);
+});
 
 module.exports = router;
