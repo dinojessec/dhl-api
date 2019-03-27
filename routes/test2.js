@@ -1,54 +1,36 @@
-const express = require('express');
+let sql = 'INSERT INTO student (status,';
 
-const router = express.Router();
-
-const pdsModel = require('../models/personal-data-sheet-model');
-
-const userModel = require('../models/user-model');
-const studentModel = require('../models/student-model');
-const addressModel = require('../models/address-model');
-
-function sendResponse(success, message) {
-  return { success, message };
+// columns
+const keys = Object.keys(input);
+const end = keys.length - 1;
+for (let i = 0; i <= end; i++) {
+  const key = keys[i];
+  if (key !== '') {
+    if (i === end) {
+      sql += `${key}`;
+    } else {
+      sql += `${key},`;
+    }
+  }
 }
 
-// GET /students
-router.get('/', (req, res) => {
-  res.json({
-    hello: 'world',
-  });
-});
+sql += ') VALUES ("pending",';
+// values
+const values = Object.values(input);
+const lastVal = values.length - 1;
 
-// POST /students
-router.post('/', (req, res) => {
-  try {
-    pdsModel.generateID().then((dataSheetId) => {
-      const pdsID = dataSheetId;
-
-      // Adds address of student to DB
-      if (typeof pdsID !== 'undefined') {
-        addressModel.addAddress(req.body, pdsID);
+for (let i = 0; i <= lastVal; i++) {
+  const val = values[i];
+  if (val !== '') {
+    if (student.checkifNaN(val)) {
+      const newVal = student.checkifNaN(val);
+      if (i === lastVal) {
+        sql += `${newVal}`;
+      } else {
+        sql += `${newVal},`;
       }
-
-      // Adds student to DB
-      userModel.generateUserID(req.body).then((userId) => {
-        if (typeof pdsID !== 'undefined' && typeof userId !== 'undefined') {
-          const addStudent = studentModel.create(req.body, pdsID, userId);
-          addStudent.then((response) => {
-            if (response.success) {
-              res.json(sendResponse(response.success, response.message));
-            } else {
-              res.json(sendResponse(response.success, response.message));
-            }
-            res.end();
-          });
-        }
-      });
-    });
-  } catch (e) {
-    res.json(sendResponse(false, 'Unknown error occured'));
-    res.end();
+    }
   }
-});
+}
 
-module.exports = router;
+sql += ')';

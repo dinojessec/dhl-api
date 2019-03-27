@@ -3,15 +3,15 @@ const express = require('express');
 const router = express.Router();
 
 const studentModel = require('../models/student-model');
-const strandModel = require('../models/strand-model');
+// const strandModel = require('../models/strand-model');
 
 // GET /students
-router.get('/', (req, res) => {
-  strandModel.generateStrand().then((strandModelResult) => {
-    const strandData = strandModelResult;
-    res.json({ strandData });
-  });
-});
+// router.get('/', (req, res) => {
+//   strandModel.generateStrand().then((strandModelResult) => {
+//     const strandData = strandModelResult;
+//     res.json({ strandData });
+//   });
+// });
 
 // POST /students
 router.post('/', (req, res) => {
