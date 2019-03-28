@@ -111,41 +111,34 @@ const student = {
 
   update(params) {
     return new Promise((resolve) => {
-      let sql = 'INSERT INTO student(';
+      const input = params;
+      const sql = `UPDATE student
+                    SET 
+                        firstName = '${input.firstName}',
+                        middleName = '${input.middleName}',
+                        lastName = '${input.lastName}',
+                        LRN = ${input.LRN},
+                        strandID = ${input.strandID},
+                        mobileNumber = ${input.mobileNumber},
+                        landlineNumber = ${input.landlineNumber},
+                        birthday = '${input.birthday}',
+                        gender = '${input.gender}',
+                        guardian = '${input.guardian}',
+                        religion = '${input.religion}',
+                        motherTongue = '${input.motherTongue}',
+                        ethnicGroup = '${input.ethnicGroup}',
+                        referredBy = '${input.referredBy}',
+                        preferredShift = '${input.preferredShift}'
+                    WHERE
+                        personalDataSheetId = ${input.personalDataSheetId}`;
 
-      const keys = Object.keys(params);
-      const end = keys.length - 1;
-      for (let i = 0; i <= end; i++) {
-        const key = keys[i];
-        if (key !== '') {
-          if (i === end) {
-            sql += `${key}`;
-          } else {
-            sql += `${key},`;
-          }
-        }
-      }
-
-      sql += ') VAlUES(';
-
-      const values = Object.values(params);
-      const lastVal = values.length - 1;
-      for (let i = 0; i <= lastVal; i++) {
-        const val = values[i];
-        if (val !== '') {
-          if (student.checkifNaN(val)) {
-            const newVal = student.checkifNaN(val);
-            if (i === lastVal) {
-              sql += `${newVal}`;
-            } else {
-              sql += `${newVal},`;
-            }
-          }
-        }
-      }
-
-      sql += ')';
-      // console.log(sql);
+      // connection.query(sql, (error, results) => {
+      //   if (typeof results !== 'undefined') {
+      //     resolve(results);
+      //   } else {
+      //     console.log('Value Undefined' error);
+      //   }
+      // });
       resolve(sql);
     }); // end of promise
   },
