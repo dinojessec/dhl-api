@@ -8,12 +8,10 @@ const student = {
   // },
 
   addStudent(params, pdsID, userID) {
-    const sql = `INSERT INTO student
-                  (studentID, personalDataSheetID, userID, firstName, middleName, lastName)
-                  VALUES
-                  (NULL, ${pdsID}, ${userID}, '${params.firstName}', '${params.middleName}', '${
-  params.lastName
-}')`;
+    const sql = `INSERT INTO Student(studentID, personalDataSheetID, userID, firstName, middleName, lastName, strandID, LRN, gradeLevel)
+                  VALUES(NULL, ${pdsID}, ${userID}, '${params.firstName}', '${
+  params.middleName
+}', '${params.lastName}', ${params.stranID}, ${params.LRN}, ${params.gradeLevel})`;
 
     return sql;
   },
@@ -21,7 +19,7 @@ const student = {
   update(params) {
     return new Promise((resolve) => {
       const input = params;
-      const sql = `UPDATE student
+      const sql = `UPDATE Student
                     SET 
                         firstName = '${input.firstName}',
                         middleName = '${input.middleName}',
@@ -39,7 +37,7 @@ const student = {
                         referredBy = '${input.referredBy}',
                         preferredShift = '${input.preferredShift}'
                     WHERE
-                        personalDataSheetId = ${input.personalDataSheetId}`;
+                        personalDataSheetID = ${input.personalDataSheetID}`;
 
       // connection.query(sql, (error, results) => {
       //   if (typeof results !== 'undefined') {

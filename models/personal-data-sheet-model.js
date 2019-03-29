@@ -1,6 +1,6 @@
 const personalDataSheet = {
   generatePdsID() {
-    const sql = 'INSERT INTO PersonalDataSheet(PersonalDataSheetId) VALUES (NULL)';
+    const sql = 'INSERT INTO PersonalDataSheet(PersonalDataSheetID) VALUES (NULL)';
 
     return sql;
   },

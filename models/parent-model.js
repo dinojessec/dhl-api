@@ -5,6 +5,18 @@ const parent = {
 
     return sql;
   },
+
+  addFather(pdsID) {
+    const sql = `INSERT INTO Father(personalDataSheetID, fatherID) VALUES(${pdsID}, NULL)`;
+
+    return sql;
+  },
+
+  addMother(pdsID) {
+    const sql = `INSERT INTO Mother(personalDataSheetID, motherID) VALUES(${pdsID}, NULL)`;
+
+    return sql;
+  },
 };
 
 module.exports = parent;

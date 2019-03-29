@@ -11,7 +11,7 @@ const user = {
     const encryptedPassword = cryptr.encrypt(decryptPassword);
 
     const sql = `
-          INSERT INTO user (userId, username, password)
+          INSERT INTO User (userID, username, password)
           VALUES (NULL, "${userName}", "${encryptedPassword}")
       `;
 

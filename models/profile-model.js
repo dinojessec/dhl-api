@@ -2,12 +2,12 @@ const studentProfile = {
   getStudentInfo() {
     const testID = 18;
     return new Promise((resolve, reject) => {
-      const sql = `SELECT * FROM user
+      const sql = `SELECT * FROM User
                           LEFT JOIN student 
-                              ON user.userId = student.userId 
+                              ON user.userID = student.userID 
                           LEFT JOIN strand 
-                              ON student.strandId = strand.strandId 
-                          WHERE user.userId=${testID};`;
+                              ON student.strandID = strand.strandID
+                          WHERE user.userID=${testID};`;
 
       connection.query(sql, (error, result) => {
         if (result !== 'undefined') {

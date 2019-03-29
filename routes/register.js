@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const studentModel = require('../models/student-model');
-// const strandModel = require('../models/strand-model');
+const strandModel = require('../models/strand-model');
 const personalDataSheetModel = require('../models/personal-data-sheet-model');
 const userModel = require('../models/user-model');
 const parentModel = require('../models/parent-model');
@@ -11,12 +11,12 @@ const addressModel = require('../models/address-model');
 const educationModel = require('../models/education-model');
 
 // GET /students
-// router.get('/', (req, res) => {
-//   strandModel.generateStrand().then((strandModelResult) => {
-//     const strandData = strandModelResult;
-//     res.json({ strandData });
-//   });
-// });
+router.get('/', (req, res) => {
+  strandModel.generateStrand().then((strandModelResult) => {
+    const strandData = strandModelResult;
+    res.json({ strandData });
+  });
+});
 
 // POST /students
 // router.post('/', (req, res) => {
@@ -62,8 +62,11 @@ router.post('/', (req, res) => {
                 if (err) {
                   console.log('student query error', err);
                 } else {
-                  const parentQuery = parentModel.addParent(pdsID);
-                  connection.query(parentQuery, (err, result) => {
+                  // const studentID = result.insertId;
+
+                  const fatherQuery = parentModel.addFather(pdsID);
+                  const motherQuery = parentModel.addMother(pdsID);
+                  connection.query(fatherQuery, motherQuery, (err, result) => {
                     if (err) {
                       console.log('parent query error', err);
                     } else {
@@ -80,7 +83,7 @@ router.post('/', (req, res) => {
                             } else {
                               connection.commit();
                               console.log('success', result);
-                              res.json({ message: 'pdsID', pdsID });
+                              res.json({ message: 'pdsID', pdsID, fields });
                             }
                           });
                         }
