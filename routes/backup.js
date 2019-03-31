@@ -27,7 +27,7 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
   const params = req.body;
-
+  console.log(params);
   const pdsQuery = personalDataSheetModel.generatePdsID();
   const userQuery = userModel.generateUserID(params);
 
@@ -40,7 +40,7 @@ router.post('/', (req, res) => {
           console.log(pdsErr);
         } else {
           const pdsID = pdsResult.insertId;
-          console.log('pdsID=', pdsID);
+
           connection.query(userQuery, (userErr, userResult) => {
             console.log(userErr);
             console.log(userResult);
@@ -49,7 +49,7 @@ router.post('/', (req, res) => {
               connection.rollback();
             } else {
               const userID = userResult.insertId;
-              console.log('userID=', userID);
+              console.log(userID);
 
               const studentQuery = studentModel.addStudent(params, pdsID, userID);
               connection.query(studentQuery, (studentErr, studentResult, fields) => {
@@ -58,8 +58,9 @@ router.post('/', (req, res) => {
                   res.json({ message: 'Student Query error' });
                   connection.rollback();
                 } else {
+                  console.log(studentResult);
                   const studentID = studentResult.insertId;
-                  console.log('studentID=', studentID);
+                  console.log(studentID);
 
                   const fatherQuery = parentModel.addFather(pdsID);
                   connection.query(fatherQuery, (fatherErr, fatherResult) => {
@@ -68,7 +69,7 @@ router.post('/', (req, res) => {
                       connection.rollback();
                     } else {
                       const fatherID = fatherResult.insertId;
-                      console.log('fatherID=', fatherID);
+                      console.log(fatherID);
 
                       const motherQuery = parentModel.addMother(pdsID);
                       connection.query(motherQuery, (motherErr, motherResult) => {
@@ -77,7 +78,7 @@ router.post('/', (req, res) => {
                           connection.rollback();
                         } else {
                           const motherID = motherResult.insertId;
-                          console.log('motherID', motherID);
+                          console.log(motherID);
 
                           const addressQuery = addressModel.addAddress(pdsID);
                           connection.query(addressQuery, (addressErr, addressResult) => {
@@ -86,7 +87,7 @@ router.post('/', (req, res) => {
                               res.json({ message: 'Address Query error' });
                             } else {
                               const addressID = addressResult.insertId;
-                              console.log('addressID=', addressID);
+                              console.log(addressID);
 
                               const educationQuery = educationModel.addEducation(pdsID);
                               connection.query(educationQuery, (educationErr, educationResult) => {
@@ -99,7 +100,7 @@ router.post('/', (req, res) => {
                                   });
                                   connection.commit();
                                   const educationID = educationResult.insertId;
-                                  console.log('educationID=', educationID);
+                                  console.log(educationID);
                                 }
                               });
                             }
@@ -116,7 +117,6 @@ router.post('/', (req, res) => {
       });
     }
   });
-
   // end of line
 });
 

@@ -11,7 +11,7 @@ const student = {
     const sql = `INSERT INTO Student(studentID, personalDataSheetID, userID, firstName, middleName, lastName, strandID, LRN, gradeLevel)
                   VALUES(NULL, ${pdsID}, ${userID}, '${params.firstName}', '${
   params.middleName
-}', '${params.lastName}', ${params.stranID}, ${params.LRN}, ${params.gradeLevel})`;
+}', '${params.lastName}', ${params.strandID}, ${params.LRN}, '${params.gradeLevel}');`;
 
     return sql;
   },

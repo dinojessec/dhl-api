@@ -12,7 +12,7 @@ const user = {
 
     const sql = `
           INSERT INTO User (userID, username, password)
-          VALUES (NULL, "${userName}", "${encryptedPassword}")
+          VALUES (NULL, "${userName}", "${encryptedPassword}");
       `;
 
     return sql;
