@@ -63,6 +63,44 @@ const student = {
       resolve(sql);
     }); // end of promise
   },
+
+  getStudent() {
+    const testID = 24;
+    return new Promise((resolve, reject) => {
+      const sql = `
+      SELECT Student.*, Father.*, Mother.*, Education.*, Address.*,
+        TIMESTAMPDIFF(YEAR,birthday,CURDATE()) AS age,
+        DATE_FORMAT(birthday,'%d/%m/%Y') AS formated 
+          FROM Student
+            INNER JOIN Father
+              ON Student.personalDataSheetID = Father.personalDataSheetID
+            INNER JOIN Mother
+              ON Student.personalDataSheetID = Mother.personalDataSheetID
+            INNER JOIN Address
+              ON Student.personalDataSheetID = Address.personalDataSheetID
+            INNER JOIN Education
+              ON Student.personalDataSheetID = Education.personalDataSheetID
+            INNER JOIN Payment
+              ON Student.personalDataSheetID = Payment.personalDataSheetID
+            INNER JOIN Voucher
+              ON Student.personalDataSheetID = Voucher.personalDataSheetID
+            INNER JOIN Document
+              ON Student.personalDataSheetID = Document.personalDataSheetID
+            INNER JOIN Uniform
+              ON Student.personalDataSheetID = Uniform.personalDataSheetID
+            where Student.personalDataSheetID = ${testID}
+      `;
+
+      connection.query(sql, (error, result) => {
+        if (result !== 'undefined') {
+          const sqlValue = result;
+          resolve(sqlValue);
+        } else {
+          reject(error);
+        }
+      });
+    });
+  },
 };
 
 module.exports = student;
