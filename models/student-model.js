@@ -30,7 +30,7 @@ const student = {
     return sql;
   },
 
-  update(params) {
+  updateStudent(params) {
     return new Promise((resolve) => {
       const input = params;
       const sql = `UPDATE Student

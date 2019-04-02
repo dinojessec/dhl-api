@@ -17,6 +17,70 @@ const parent = {
 
     return sql;
   },
+
+  updateFather(params) {
+    return new Promise((resolve) => {
+      const sql = `UPDATE Father
+                    SET 
+                       fatherName = '${params.fatherName}',
+                       fatherHomeNumber = '${params.fatherHomeNumber}',
+                       fatherStreetName = '${params.fatherStreetName}',
+                       fatherBarangay = '${params.fatherBarangay}',
+                       fatherTown = '${params.fatherTown}',
+                       fatherCity = '${params.fatherCity}',
+                       fatherOccupation = '${params.fatherOccupation}',
+                       fatherEmployer = '${params.fatherEmployer}',
+                       fatherEmployerAddress = '${params.fatherEmployerAddress}',
+                       fatherEducationalAttainment = '${params.fatherEducationalAttainment}',
+                       fatherSchoolGraduated = '${params.fatherSchoolGraduated}',
+                       fatherReligion = '${params.fatherReligion}',
+                       fatherMobileNumber = ${params.fatherMobileNumber},
+                       fatherLandlineNumber = ${params.fatherLandlineNumber},
+                    WHERE
+                        personalDataSheetID = ${params.personalDataSheetID}`;
+
+      // connection.query(sql, (error, results) => {
+      //   if (typeof results !== 'undefined') {
+      //     resolve(results);
+      //   } else {
+      //     console.log('Value Undefined' error);
+      //   }
+      // });
+      resolve(sql);
+    });
+  },
+
+  updateMother(params) {
+    return new Promise((resolve) => {
+      const sql = `UPDATE Mother
+                    SET 
+                       motherName = '${params.motherName}',
+                       motherHomeNumber = '${params.motherHomeNumber}',
+                       motherStreetName = '${params.motherStreetName}',
+                       motherBarangay = '${params.motherBarangay}',
+                       motherTown = '${params.motherTown}',
+                       motherCity = '${params.motherCity}',
+                       motherOccupation = '${params.motherOccupation}',
+                       motherEmployer = '${params.motherEmployer}',
+                       motherEmployerAddress = '${params.motherEmployerAddress}',
+                       motherEducationalAttainment = '${params.motherEducationalAttainment}',
+                       motherSchoolGraduated = '${params.motherSchoolGraduated}',
+                       motherReligion = '${params.motherReligion}',
+                       motherMobileNumber = ${params.motherMobileNumber},
+                       motherLandlineNumber = ${params.motherLandlineNumber},
+                    WHERE
+                        personalDataSheetID = ${params.personalDataSheetID}`;
+
+      // connection.query(sql, (error, results) => {
+      //   if (typeof results !== 'undefined') {
+      //     resolve(results);
+      //   } else {
+      //     console.log('Value Undefined' error);
+      //   }
+      // });
+      resolve(sql);
+    });
+  },
 };
 
 module.exports = parent;
