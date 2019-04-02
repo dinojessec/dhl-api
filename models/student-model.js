@@ -8,10 +8,12 @@ const student = {
   // },
 
   addStudent(params, pdsID, userID) {
-    const sql = `INSERT INTO Student(studentID, personalDataSheetID, userID, firstName, middleName, lastName, strandID, LRN, gradeLevel)
+    const sql = `INSERT INTO Student(studentID, personalDataSheetID, userID, firstName, middleName, lastName, strandID, LRN, gradeLevel, dateRegistered)
                   VALUES(NULL, ${pdsID}, ${userID}, '${params.firstName}', '${
   params.middleName
-}', '${params.lastName}', ${params.strandID}, ${params.LRN}, '${params.gradeLevel}');`;
+}', '${params.lastName}', ${params.strandID}, ${params.LRN}, '${
+  params.gradeLevel
+}', CURDATE());`;
 
     return sql;
   },

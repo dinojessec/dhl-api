@@ -9,6 +9,10 @@ const userModel = require('../models/user-model');
 const parentModel = require('../models/parent-model');
 const addressModel = require('../models/address-model');
 const educationModel = require('../models/education-model');
+const paymentModel = require('../models/payment-model');
+const voucherModel = require('../models/voucher-model');
+const documentModel = require('../models/document-model');
+const uniformModel = require('../models/uniform-model');
 
 // GET /students
 router.get('/', (req, res) => {
@@ -19,12 +23,6 @@ router.get('/', (req, res) => {
 });
 
 // POST /students
-// router.post('/', (req, res) => {
-//   const params = req.body;
-
-//   res.json({ params });
-// });
-
 router.post('/', (req, res) => {
   const params = req.body;
 
@@ -52,7 +50,7 @@ router.post('/', (req, res) => {
               console.log('userID=', userID);
 
               const studentQuery = studentModel.addStudent(params, pdsID, userID);
-              connection.query(studentQuery, (studentErr, studentResult, fields) => {
+              connection.query(studentQuery, (studentErr, studentResult) => {
                 if (studentErr) {
                   console.log(studentErr);
                   res.json({ message: 'Student Query error' });
@@ -94,12 +92,66 @@ router.post('/', (req, res) => {
                                   res.json({ message: 'Education Query error' });
                                   connection.rollback();
                                 } else {
-                                  res.json({
-                                    message: 'Account Created. Please log-in to your account',
-                                  });
-                                  connection.commit();
                                   const educationID = educationResult.insertId;
                                   console.log('educationID=', educationID);
+                                  const paymentQuery = paymentModel.addPayment(pdsID);
+                                  connection.query(paymentQuery, (paymentErr, paymentResult) => {
+                                    if (paymentErr) {
+                                      connection.rollback();
+                                      res.json({ message: 'Payment Query error' });
+                                    } else {
+                                      const paymentID = paymentResult.insertId;
+                                      console.log('paymentID=', paymentID);
+                                      const voucherQuery = voucherModel.addVoucher(pdsID);
+                                      connection.query(
+                                        voucherQuery,
+                                        (voucherErr, voucherResult) => {
+                                          if (voucherErr) {
+                                            connection.rollback();
+                                            res.json({ message: 'Voucher Query Error' });
+                                          } else {
+                                            const voucherID = voucherResult.insertId;
+                                            console.log('voucherID=', voucherID);
+                                            const documentQuery = documentModel.addDocument(pdsID);
+                                            connection.query(
+                                              documentQuery,
+                                              (documentErr, documentResult) => {
+                                                if (documentErr) {
+                                                  connection.rollback();
+                                                  res.json({ message: 'Document query error' });
+                                                } else {
+                                                  const documentID = documentResult.insertId;
+                                                  console.log('documentID=', documentID);
+                                                  const uniformQuery = uniformModel.addUniform(
+                                                    pdsID,
+                                                  );
+                                                  connection.query(
+                                                    uniformQuery,
+                                                    (uniformErr, uniformResult) => {
+                                                      if (uniformErr) {
+                                                        connection.rollback();
+                                                        res.json({
+                                                          message: 'Uniform query error',
+                                                        });
+                                                      } else {
+                                                        const uniformID = uniformResult.insertId;
+                                                        console.log('uniformID=', uniformID);
+                                                        res.json({
+                                                          message:
+                                                            'Account Created. Please log-in to your account',
+                                                        });
+                                                        connection.commit();
+                                                      }
+                                                    },
+                                                  );
+                                                }
+                                              },
+                                            );
+                                          }
+                                        },
+                                      );
+                                    }
+                                  });
                                 }
                               });
                             }
