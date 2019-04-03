@@ -8,8 +8,6 @@ const logger = require('morgan');
 
 const bodyParser = require('body-parser');
 
-// const jwt = require('jsonwebtoken');
-
 // connect to database
 const mysql = require('mysql');
 const indexRouter = require('./routes/index');

@@ -10,8 +10,9 @@ const motherModel = require('../models/parent-model');
 const educationModel = require('../models/education-model');
 
 // add :ID as part of the route to specify what student needed to pull up
-router.get('/:pdsID', (req, res) => {
+router.post('/:pdsID', (req, res) => {
   const searchID = req.params.pdsID;
+  console.log(searchID);
   res.json({ searchID });
   // studentModel
   //   .getStudent(searchID)
