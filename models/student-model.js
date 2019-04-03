@@ -6,18 +6,6 @@ const student = {
   //   }
   //   return `${value}`;
   // },
-  checkUsername(params) {
-    return new Promise((resolve, reject) => {
-      const sql = `SELECT * FROM User WHERE username = '${params.username}'`;
-
-      connection.query(sql, (err, result) => {
-        if (err) {
-          reject(err);
-        }
-        resolve(result.length);
-      });
-    });
-  },
 
   addStudent(params, pdsID, userID) {
     const sql = `INSERT INTO Student(studentID, personalDataSheetID, userID, firstName, middleName, lastName, strandID, LRN, gradeLevel, dateRegistered)
@@ -30,7 +18,7 @@ const student = {
     return sql;
   },
 
-  updateStudent(params) {
+  update(params) {
     return new Promise((resolve) => {
       const input = params;
       const sql = `UPDATE Student
@@ -64,11 +52,10 @@ const student = {
     }); // end of promise
   },
 
-  getStudent() {
-    const testID = 24;
+  getStudent(searchID) {
     return new Promise((resolve, reject) => {
       const sql = `
-      SELECT Student.*, Father.*, Mother.*, Education.*, Address.*,
+      SELECT Student.*, Father.*, Mother.*, Education.*, Address.*, Voucher.*,
         TIMESTAMPDIFF(YEAR,birthday,CURDATE()) AS age,
         DATE_FORMAT(birthday,'%d/%m/%Y') AS formated 
           FROM Student
@@ -80,15 +67,11 @@ const student = {
               ON Student.personalDataSheetID = Address.personalDataSheetID
             INNER JOIN Education
               ON Student.personalDataSheetID = Education.personalDataSheetID
-            INNER JOIN Payment
-              ON Student.personalDataSheetID = Payment.personalDataSheetID
             INNER JOIN Voucher
               ON Student.personalDataSheetID = Voucher.personalDataSheetID
-            INNER JOIN Document
-              ON Student.personalDataSheetID = Document.personalDataSheetID
             INNER JOIN Uniform
               ON Student.personalDataSheetID = Uniform.personalDataSheetID
-            where Student.personalDataSheetID = ${testID}
+            where Student.personalDataSheetID = ${searchID}
       `;
 
       connection.query(sql, (error, result) => {
