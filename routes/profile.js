@@ -10,24 +10,27 @@ const motherModel = require('../models/parent-model');
 const educationModel = require('../models/education-model');
 
 // add :ID as part of the route to specify what student needed to pull up
-router.post('/:pdsID', (req, res) => {
-  const searchID = req.params.pdsID;
-  console.log(searchID);
-  res.json({ searchID });
-  // studentModel
-  //   .getStudent(searchID)
-  //   .then((studentQuery) => {
-  //     // console.log(studentQuery);
-  //     res.json({ studentQuery });
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   });
+router.get('/:ID', (req, res) => {
+  const searchID = req.params.ID;
+  // console.log(searchID);
+  // res.json({ searchID });
+  studentModel
+    .getStudent(searchID)
+    .then((studentQuery) => {
+      const studentStrand = studentQuery[0].strandID;
+      strandModel.getStudentStrand(studentStrand).then((studentStrandQuery) => {
+        const strandVal = studentStrandQuery[0].strandName;
+        res.json({ info: studentQuery, strand: strandVal });
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 router.put('/', (req, res) => {
   const params = req.body;
-
+  console.log(params);
   async function updateProfile() {
     const studentSql = await studentModel.updateStudent(params).then(val => val);
     // const addressSql = await addressModel.updateAddress(params).then(val => val);

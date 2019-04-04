@@ -4,7 +4,6 @@ const btoa = require('btoa');
 const Cryptr = require('cryptr');
 
 const cryptr = new Cryptr('secretKey');
-// const jwt = require('jsonwebtoken');
 const router = express.Router();
 
 const userModel = require('../models/user-model');
@@ -33,14 +32,16 @@ router.post('/', (req, res) => {
         if (userInputPassword !== atobPass) {
           res.json({ message: 'Invalid password', status: 404 });
         } else {
-          const payload = { subject: dbUsername };
-          const token = jwt.sign(payload, 'thisSecretKey');
-          res.json({
-            message: 'Login Success',
-            // username: dbUsername,
-            // id: dbUserID,
-            status: 200,
-            token,
+          userModel.getPdsID(dbUserID).then((studentVal) => {
+            const pdsVal = studentVal[0].personalDataSheetID;
+            const payload = { subject: dbUsername };
+            const token = jwt.sign(payload, 'thisSecretKey', { keyid: `${pdsVal}`, expiresIn: 60 });
+            res.json({
+              message: 'Login Success',
+              id: pdsVal,
+              status: 200,
+              token,
+            });
           });
         }
       }

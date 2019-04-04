@@ -8,17 +8,15 @@ const student = {
   // },
 
   addStudent(params, pdsID, userID) {
-    const sql = `INSERT INTO Student(studentID, personalDataSheetID, userID, firstName, middleName, lastName, strandID, LRN, gradeLevel, dateRegistered)
+    const sql = `INSERT INTO Student(studentID, personalDataSheetID, userID, firstName, middleName, lastName, dateRegistered)
                   VALUES(NULL, ${pdsID}, ${userID}, '${params.firstName}', '${
   params.middleName
-}', '${params.lastName}', ${params.strandID}, ${params.LRN}, '${
-  params.gradeLevel
-}', CURDATE());`;
+}', '${params.lastName}', CURDATE());`;
 
     return sql;
   },
 
-  update(params) {
+  updateStudent(params) {
     return new Promise((resolve) => {
       const input = params;
       const sql = `UPDATE Student
@@ -57,19 +55,19 @@ const student = {
       const sql = `
       SELECT Student.*, Father.*, Mother.*, Education.*, Address.*, Voucher.*,
         TIMESTAMPDIFF(YEAR,birthday,CURDATE()) AS age,
-        DATE_FORMAT(birthday,'%d/%m/%Y') AS formated 
+        DATE_FORMAT(birthday,'%d/%m/%Y') AS formatedBirthday 
           FROM Student
-            INNER JOIN Father
+            LEFT JOIN Father
               ON Student.personalDataSheetID = Father.personalDataSheetID
-            INNER JOIN Mother
+            LEFT JOIN Mother
               ON Student.personalDataSheetID = Mother.personalDataSheetID
-            INNER JOIN Address
+            LEFT JOIN Address
               ON Student.personalDataSheetID = Address.personalDataSheetID
-            INNER JOIN Education
+            LEFT JOIN Education
               ON Student.personalDataSheetID = Education.personalDataSheetID
-            INNER JOIN Voucher
+            LEFT JOIN Voucher
               ON Student.personalDataSheetID = Voucher.personalDataSheetID
-            INNER JOIN Uniform
+            LEFT JOIN Uniform
               ON Student.personalDataSheetID = Uniform.personalDataSheetID
             where Student.personalDataSheetID = ${searchID}
       `;
@@ -77,11 +75,13 @@ const student = {
       connection.query(sql, (error, result) => {
         if (result !== 'undefined') {
           const sqlValue = result;
+          // console.log('getstudent query', result);
           resolve(sqlValue);
         } else {
           reject(error);
         }
       });
+      // resolve(sql);
     });
   },
 };

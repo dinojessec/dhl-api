@@ -33,6 +33,21 @@ const user = {
     });
   },
 
+  getPdsID(userID) {
+    return new Promise((resolve, reject) => {
+      const sql = `SELECT * FROM Student WHERE userID = ${userID}`;
+
+      connection.query(sql, (err, result) => {
+        if (err) {
+          reject(err);
+          console.log('error on getPDSID', err);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  },
+
   comparePassword(userInputPass, dbPassword) {
     return new Promise((resolve, reject) => {
       const decryptPass = cryptr.decrypt(dbPassword);

@@ -3,7 +3,6 @@ const express = require('express');
 const router = express.Router();
 
 const studentModel = require('../models/student-model');
-const strandModel = require('../models/strand-model');
 const personalDataSheetModel = require('../models/personal-data-sheet-model');
 const userModel = require('../models/user-model');
 const parentModel = require('../models/parent-model');
@@ -14,13 +13,6 @@ const voucherModel = require('../models/voucher-model');
 const documentModel = require('../models/document-model');
 const uniformModel = require('../models/uniform-model');
 
-// GET /students
-router.get('/', (req, res) => {
-  strandModel.generateStrand().then((strandModelResult) => {
-    const strandData = strandModelResult;
-    res.json({ strandData });
-  });
-});
 
 // POST /students
 router.post('/', (req, res) => {
