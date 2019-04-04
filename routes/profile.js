@@ -12,7 +12,7 @@ const educationModel = require('../models/education-model');
 // add :ID as part of the route to specify what student needed to pull up
 router.get('/:ID', (req, res) => {
   const searchID = req.params.ID;
-  // console.log(searchID);
+  // console.log('paramsss', searchID);
   // res.json({ searchID });
   studentModel
     .getStudent(searchID)
@@ -20,7 +20,7 @@ router.get('/:ID', (req, res) => {
       const studentStrand = studentQuery[0].strandID;
       strandModel.getStudentStrand(studentStrand).then((studentStrandQuery) => {
         const strandVal = studentStrandQuery[0].strandName;
-        res.json({ info: studentQuery, strand: strandVal });
+        res.json({ info: studentQuery, strand: strandVal, pdsID: searchID });
       });
     })
     .catch((err) => {
@@ -30,22 +30,20 @@ router.get('/:ID', (req, res) => {
 
 router.put('/', (req, res) => {
   const params = req.body;
-  console.log(params);
-  async function updateProfile() {
-    const studentSql = await studentModel.updateStudent(params).then(val => val);
-    // const addressSql = await addressModel.updateAddress(params).then(val => val);
-    // const fatherSql = await fatherModel.updateFather(params).then(val => val);
-    // const motherSql = await motherModel.updateMother(params).then(val => val);
-    // const educationSql = await educationModel.updateEducation(params).then(val => val);
-    console.log(studentSql);
-    // console.log(addressSql);
-    // console.log(fatherSql);
-    // console.log(motherSql);
-    // console.log(educationSql);
-    // const update = Promise.all([studentSql, addressSql, fatherSql, motherSql, educationSql]);
-    // return update;
-  }
-  updateProfile();
+  // console.log(params);
+
+  studentModel.updateStudent(params).then((val) => {
+    console.log('update student', val);
+  });
+  // const addressSql = await addressModel.updateAddress(params).then(val => val);
+  // const fatherSql = await fatherModel.updateFather(params).then(val => val);
+  // const motherSql = await motherModel.updateMother(params).then(val => val);
+  // const educationSql = await educationModel.updateEducation(params).then(val => val);
+  // console.log('student query', studentSql);
+  // console.log(addressSql);
+  // console.log(fatherSql);
+  // console.log(motherSql);
+  // console.log(educationSql);
 });
 
 module.exports = router;

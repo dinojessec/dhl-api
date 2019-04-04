@@ -15,6 +15,7 @@ const education = {
                       jhsYear = ${params.jhsYear},
                       jhsHonor = '${params.jhsHonor}',
                       jhsLocation = '${params.jhsLocation}',
+                      schoolType = '${params.schoolType}',
                       organization = '${params.organization}',
                       orgAward = '${params.orgAward}',
                     WHERE
