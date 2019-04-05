@@ -13,20 +13,21 @@ const voucherModel = require('../models/voucher-model');
 const documentModel = require('../models/document-model');
 const uniformModel = require('../models/uniform-model');
 
-
 // POST /students
 router.post('/', (req, res) => {
   const params = req.body;
 
   const pdsQuery = personalDataSheetModel.generatePdsID();
-  const userQuery = userModel.generateUserID(params);
+  const groupQuery = userModel.generateGroupID();
 
   function userCheck() {
-    return studentModel.checkUsername(params).then(val => val);
+    return userModel.checkUsername(params).then(val => val);
   }
 
   userCheck().then((val) => {
-    if (val >= 1) {
+    // console.log('check user', val);
+    const numberOfUser = Object.keys(val);
+    if (numberOfUser.length >= 1) {
       res.json({ message: 'Username already exists', status: 404 });
     } else {
       connection.beginTransaction((err) => {
@@ -39,143 +40,163 @@ router.post('/', (req, res) => {
             } else {
               const pdsID = pdsResult.insertId;
               console.log('pdsID=', pdsID);
-              connection.query(userQuery, (userErr, userResult) => {
-                console.log(userErr);
-                console.log(userResult);
-                if (userErr) {
-                  res.json({ message: 'User Query error', status: 404 });
+
+              connection.query(groupQuery, (groupErr, groupResult) => {
+                if (groupErr) {
+                  res.json({ message: 'group Query error', status: 404 });
                   connection.rollback();
                 } else {
-                  const userID = userResult.insertId;
-                  console.log('userID=', userID);
-
-                  const studentQuery = studentModel.addStudent(params, pdsID, userID);
-                  connection.query(studentQuery, (studentErr, studentResult) => {
-                    if (studentErr) {
-                      console.log(studentErr);
-                      res.json({ message: 'Student Query error', status: 404 });
+                  const groupIDQuery = groupResult[0].groupID;
+                  console.log(groupIDQuery);
+                  const userQuery = userModel.generateUserID(params, groupIDQuery);
+                  connection.query(userQuery, (userErr, userResult) => {
+                    console.log(userErr);
+                    console.log(userResult);
+                    if (userErr) {
+                      res.json({ message: 'User Query error', status: 404 });
                       connection.rollback();
                     } else {
-                      const studentID = studentResult.insertId;
-                      console.log('studentID=', studentID);
+                      const userID = userResult.insertId;
+                      console.log('userID=', userID);
 
-                      const fatherQuery = parentModel.addFather(pdsID);
-                      connection.query(fatherQuery, (fatherErr, fatherResult) => {
-                        if (fatherErr) {
-                          res.json({ message: 'Father Query error', status: 404 });
+                      const studentQuery = studentModel.addStudent(params, pdsID, userID);
+                      connection.query(studentQuery, (studentErr, studentResult) => {
+                        if (studentErr) {
+                          console.log(studentErr);
+                          res.json({ message: 'Student Query error', status: 404 });
                           connection.rollback();
                         } else {
-                          const fatherID = fatherResult.insertId;
-                          console.log('fatherID=', fatherID);
+                          const studentID = studentResult.insertId;
+                          console.log('studentID=', studentID);
 
-                          const motherQuery = parentModel.addMother(pdsID);
-                          connection.query(motherQuery, (motherErr, motherResult) => {
-                            if (motherErr) {
-                              res.json({ message: 'Mother Query error', status: 404 });
+                          const fatherQuery = parentModel.addFather(pdsID);
+                          connection.query(fatherQuery, (fatherErr, fatherResult) => {
+                            if (fatherErr) {
+                              res.json({ message: 'Father Query error', status: 404 });
                               connection.rollback();
                             } else {
-                              const motherID = motherResult.insertId;
-                              console.log('motherID', motherID);
+                              const fatherID = fatherResult.insertId;
+                              console.log('fatherID=', fatherID);
 
-                              const addressQuery = addressModel.addAddress(pdsID);
-                              connection.query(addressQuery, (addressErr, addressResult) => {
-                                if (addressErr) {
+                              const motherQuery = parentModel.addMother(pdsID);
+                              connection.query(motherQuery, (motherErr, motherResult) => {
+                                if (motherErr) {
+                                  res.json({ message: 'Mother Query error', status: 404 });
                                   connection.rollback();
-                                  res.json({ message: 'Address Query error', status: 404 });
                                 } else {
-                                  const addressID = addressResult.insertId;
-                                  console.log('addressID=', addressID);
+                                  const motherID = motherResult.insertId;
+                                  console.log('motherID', motherID);
 
-                                  const educationQuery = educationModel.addEducation(pdsID);
-                                  connection.query(
-                                    educationQuery,
-                                    (educationErr, educationResult) => {
-                                      if (educationErr) {
-                                        res.json({ message: 'Education Query error', status: 404 });
-                                        connection.rollback();
-                                      } else {
-                                        const educationID = educationResult.insertId;
-                                        console.log('educationID=', educationID);
-                                        const paymentQuery = paymentModel.addPayment(pdsID);
-                                        connection.query(
-                                          paymentQuery,
-                                          (paymentErr, paymentResult) => {
-                                            if (paymentErr) {
-                                              connection.rollback();
-                                              res.json({
-                                                message: 'Payment Query error',
-                                                status: 404,
-                                              });
-                                            } else {
-                                              const paymentID = paymentResult.insertId;
-                                              console.log('paymentID=', paymentID);
-                                              const voucherQuery = voucherModel.addVoucher(pdsID);
-                                              connection.query(
-                                                voucherQuery,
-                                                (voucherErr, voucherResult) => {
-                                                  if (voucherErr) {
-                                                    connection.rollback();
-                                                    res.json({
-                                                      message: 'Voucher Query Error',
-                                                      status: 404,
-                                                    });
-                                                  } else {
-                                                    const voucherID = voucherResult.insertId;
-                                                    console.log('voucherID=', voucherID);
-                                                    const documentQuery = documentModel.addDocument(
-                                                      pdsID,
-                                                    );
-                                                    connection.query(
-                                                      documentQuery,
-                                                      (documentErr, documentResult) => {
-                                                        if (documentErr) {
-                                                          connection.rollback();
-                                                          res.json({
-                                                            message: 'Document query error',
-                                                            status: 404,
-                                                          });
-                                                        } else {
-                                                          const documentID = documentResult.insertId;
-                                                          console.log('documentID=', documentID);
-                                                          const uniformQuery = uniformModel.addUniform(
-                                                            pdsID,
-                                                          );
-                                                          connection.query(
-                                                            uniformQuery,
-                                                            (uniformErr, uniformResult) => {
-                                                              if (uniformErr) {
-                                                                connection.rollback();
-                                                                res.json({
-                                                                  message: 'Uniform query error',
-                                                                  status: 404,
-                                                                });
-                                                              } else {
-                                                                const uniformID = uniformResult.insertId;
-                                                                console.log(
-                                                                  'uniformID=',
-                                                                  uniformID,
-                                                                );
-                                                                res.json({
-                                                                  message:
-                                                                    'Account Created. Please log-in to your account',
-                                                                  status: 200,
-                                                                });
-                                                                connection.commit();
-                                                              }
-                                                            },
-                                                          );
-                                                        }
-                                                      },
-                                                    );
-                                                  }
-                                                },
-                                              );
-                                            }
-                                          },
-                                        );
-                                      }
-                                    },
-                                  );
+                                  const addressQuery = addressModel.addAddress(pdsID);
+                                  connection.query(addressQuery, (addressErr, addressResult) => {
+                                    if (addressErr) {
+                                      connection.rollback();
+                                      res.json({ message: 'Address Query error', status: 404 });
+                                    } else {
+                                      const addressID = addressResult.insertId;
+                                      console.log('addressID=', addressID);
+
+                                      const educationQuery = educationModel.addEducation(pdsID);
+                                      connection.query(
+                                        educationQuery,
+                                        (educationErr, educationResult) => {
+                                          if (educationErr) {
+                                            res.json({
+                                              message: 'Education Query error',
+                                              status: 404,
+                                            });
+                                            connection.rollback();
+                                          } else {
+                                            const educationID = educationResult.insertId;
+                                            console.log('educationID=', educationID);
+                                            const paymentQuery = paymentModel.addPayment(pdsID);
+                                            connection.query(
+                                              paymentQuery,
+                                              (paymentErr, paymentResult) => {
+                                                if (paymentErr) {
+                                                  connection.rollback();
+                                                  res.json({
+                                                    message: 'Payment Query error',
+                                                    status: 404,
+                                                  });
+                                                } else {
+                                                  const paymentID = paymentResult.insertId;
+                                                  console.log('paymentID=', paymentID);
+                                                  const voucherQuery = voucherModel.addVoucher(
+                                                    pdsID,
+                                                  );
+                                                  connection.query(
+                                                    voucherQuery,
+                                                    (voucherErr, voucherResult) => {
+                                                      if (voucherErr) {
+                                                        connection.rollback();
+                                                        res.json({
+                                                          message: 'Voucher Query Error',
+                                                          status: 404,
+                                                        });
+                                                      } else {
+                                                        const voucherID = voucherResult.insertId;
+                                                        console.log('voucherID=', voucherID);
+                                                        const documentQuery = documentModel.addDocument(
+                                                          pdsID,
+                                                        );
+                                                        connection.query(
+                                                          documentQuery,
+                                                          (documentErr, documentResult) => {
+                                                            if (documentErr) {
+                                                              connection.rollback();
+                                                              res.json({
+                                                                message: 'Document query error',
+                                                                status: 404,
+                                                              });
+                                                            } else {
+                                                              const documentID = documentResult.insertId;
+                                                              console.log(
+                                                                'documentID=',
+                                                                documentID,
+                                                              );
+                                                              const uniformQuery = uniformModel.addUniform(
+                                                                pdsID,
+                                                              );
+                                                              connection.query(
+                                                                uniformQuery,
+                                                                (uniformErr, uniformResult) => {
+                                                                  if (uniformErr) {
+                                                                    connection.rollback();
+                                                                    res.json({
+                                                                      message:
+                                                                        'Uniform query error',
+                                                                      status: 404,
+                                                                    });
+                                                                  } else {
+                                                                    const uniformID = uniformResult.insertId;
+                                                                    console.log(
+                                                                      'uniformID=',
+                                                                      uniformID,
+                                                                    );
+                                                                    res.json({
+                                                                      message:
+                                                                        'Account Created. Please log-in to your account',
+                                                                      status: 200,
+                                                                    });
+                                                                    connection.commit();
+                                                                  }
+                                                                },
+                                                              );
+                                                            }
+                                                          },
+                                                        );
+                                                      }
+                                                    },
+                                                  );
+                                                }
+                                              },
+                                            );
+                                          }
+                                        },
+                                      );
+                                    }
+                                  });
                                 }
                               });
                             }

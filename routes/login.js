@@ -24,7 +24,9 @@ router.post('/', (req, res) => {
         res.json({ message: 'username does not exist', status: 404 });
       }
       if (val) {
+        // console.log(val);
         const dbUserID = val[0].userID;
+        const dbGroupID = val[0].groupID;
         const dbUsername = val[0].username;
         const dbPassword = val[0].password;
         const decryptPass = cryptr.decrypt(dbPassword);
@@ -40,6 +42,7 @@ router.post('/', (req, res) => {
               message: 'Login Success',
               id: pdsVal,
               userID: dbUserID,
+              groupID: dbGroupID,
               status: 200,
               token,
             });

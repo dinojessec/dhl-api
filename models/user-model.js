@@ -5,15 +5,21 @@ const Cryptr = require('cryptr');
 const cryptr = new Cryptr('secretKey');
 
 const user = {
-  generateUserID(params) {
+  generateGroupID() {
+    const sql = 'SELECT * FROM dhl_db2.Group WHERE groupID = 1';
+
+    return sql;
+  },
+
+  generateUserID(params, groupIDQuery) {
     const userName = params.username;
     const passWord = params.password;
     const decryptPassword = atob(passWord);
     const encryptedPassword = cryptr.encrypt(decryptPassword);
 
     const sql = `
-          INSERT INTO User (userID, username, password)
-          VALUES (NULL, "${userName}", "${encryptedPassword}");
+          INSERT INTO User (userID, username, password, groupID)
+          VALUES (NULL, "${userName}", "${encryptedPassword}", ${groupIDQuery});
       `;
 
     return sql;
