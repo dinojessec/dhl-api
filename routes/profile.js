@@ -12,7 +12,7 @@ const educationModel = require('../models/education-model');
 // add :ID as part of the route to specify what student needed to pull up
 router.get('/:id', (req, res) => {
   const searchID = req.params.id;
-  console.log('paramsss', searchID);
+  // console.log('paramsss', searchID);
   // res.json({ searchID });
   studentModel
     .getStudent(searchID)
@@ -34,9 +34,11 @@ router.put('/', (req, res) => {
   const params = req.body;
   // console.log(params);
 
-  studentModel.updateStudent(params).then((val) => {
-    console.log('update student', val);
+  studentModel.updateStudent(params).then((profileTab) => {
+    const profileVal = profileTab;
+    console.log(profileVal);
   });
+
   // const addressSql = await addressModel.updateAddress(params).then(val => val);
   // const fatherSql = await fatherModel.updateFather(params).then(val => val);
   // const motherSql = await motherModel.updateMother(params).then(val => val);

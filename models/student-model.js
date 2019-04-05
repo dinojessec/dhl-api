@@ -48,7 +48,7 @@ const student = {
           console.log('Value Undefined', error);
         }
       });
-      console.log('query', sql);
+      // console.log('query', sql);
       // resolve(sql);
     }); // end of promise
   },

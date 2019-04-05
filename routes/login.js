@@ -40,6 +40,7 @@ router.post('/', (req, res) => {
             const token = jwt.sign(payload, 'thisSecretKey', { keyid: `${pdsVal}`, expiresIn: 60 });
             res.json({
               message: 'Login Success',
+              name: dbUsername,
               id: pdsVal,
               userID: dbUserID,
               groupID: dbGroupID,
