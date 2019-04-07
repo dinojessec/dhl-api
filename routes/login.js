@@ -37,7 +37,7 @@ router.post('/', (req, res) => {
           userModel.getPdsID(dbUserID).then((studentVal) => {
             const pdsVal = studentVal[0].personalDataSheetID;
             const payload = { subject: dbUsername };
-            const token = jwt.sign(payload, 'thisSecretKey', { keyid: `${pdsVal}`, expiresIn: 60 });
+            const token = jwt.sign(payload, 'thisSecretKey', { expiresIn: '1d' });
             res.json({
               message: 'Login Success',
               name: dbUsername,
