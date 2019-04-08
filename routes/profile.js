@@ -9,11 +9,10 @@ const fatherModel = require('../models/parent-model');
 const motherModel = require('../models/parent-model');
 const educationModel = require('../models/education-model');
 
-// add :ID as part of the route to specify what student needed to pull up
 router.get('/:id', (req, res) => {
   const searchID = req.params.id;
-  // console.log('paramsss', searchID);
-  // res.json({ searchID });
+  // const searchID = req.body;
+  console.log(searchID);
   studentModel
     .getStudent(searchID)
     .then((studentQuery) => {
@@ -30,6 +29,7 @@ router.get('/:id', (req, res) => {
     });
 });
 
+// still pending. update student info still not working
 router.put('/', (req, res) => {
   const params = req.body;
   // console.log(params);
@@ -48,6 +48,19 @@ router.put('/', (req, res) => {
   // console.log(fatherSql);
   // console.log(motherSql);
   // console.log(educationSql);
+});
+
+// router.get('/:id/strand', (req, res) => {
+//   strandModel.generateStrand().then((strandModelResult) => {
+//     const strandData = strandModelResult;
+//     console.log('test', strandData);
+//     // res.json({ strandData });
+//   });
+// });
+
+router.put('/strand/', (req, res) => {
+  const params = req.body;
+  console.log(params);
 });
 
 module.exports = router;

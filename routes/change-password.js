@@ -10,6 +10,7 @@ router.put('/', (req, res, next) => {
     .changePassword(params)
     .then((response) => {
       console.log(response);
+      console.log('password changed');
     })
     .catch((err) => {
       console.log(err);

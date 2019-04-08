@@ -43,15 +43,17 @@ const strand = {
     });
   },
 
-  getStudentStrand(studentStrand) {
+  updateStudentStrand(params) {
     return new Promise((resolve, reject) => {
-      const sql = `SELECT * FROM Strand WHERE strandID = ${studentStrand}`;
-
+      const sql = `UPDATE Student SET strandID = ${params.newStrand.strandID} WHERE userID = ${
+        params.user
+      }`;
       connection.query(sql, (err, result) => {
-        if (err) {
-          console.log('get student strand error', err);
-        } else {
+        if (typeof result !== 'undefined') {
+          console.log('success');
           resolve(result);
+        } else {
+          console.log('remove strand error', err);
         }
       });
     });
