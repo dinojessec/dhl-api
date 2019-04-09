@@ -32,6 +32,7 @@ const profile = require('./routes/profile');
 const login = require('./routes/login');
 const admin = require('./routes/admin');
 const selectstrand = require('./routes/selectstrand');
+const selectgradelevel = require('./routes/selectgradelevel');
 const changePassword = require('./routes/change-password');
 
 // uncomment after placing your favicon in /public
@@ -70,6 +71,7 @@ app.use('/api/v1/profile', profile);
 app.use('/api/v1/login', login);
 app.use('/api/v1/admin', admin);
 app.use('/api/v1/selectstrand', selectstrand);
+app.use('/api/v1/selectgradelevel', selectgradelevel);
 app.use('/api/v1/changepassword', changePassword);
 
 // catch 404 and forward to error handler

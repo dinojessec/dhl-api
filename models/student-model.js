@@ -92,6 +92,23 @@ const student = {
       // resolve(sql);
     });
   },
+
+  updateGradeLevel(params) {
+    return new Promise((resolve, reject) => {
+      const sql = `UPDATE Student SET gradeLevel = '${params.value}' WHERE userID = ${
+        params.userID
+      }`;
+
+      connection.query(sql, (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          resolve(result);
+        }
+      });
+      // resolve(sql);
+    });
+  },
 };
 
 module.exports = student;
