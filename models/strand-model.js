@@ -43,6 +43,20 @@ const strand = {
     });
   },
 
+  getStudentStrand(studentStrand) {
+    return new Promise((resolve, reject) => {
+      const sql = `SELECT * FROM Strand WHERE strandID = ${studentStrand}`;
+
+      connection.query(sql, (err, result) => {
+        if (err) {
+          console.log('get student strand error', err);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  },
+  
   updateStudentStrand(params) {
     return new Promise((resolve, reject) => {
       const sql = `UPDATE Student SET strandID = ${params.newStrand.strandID} WHERE userID = ${

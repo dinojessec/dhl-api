@@ -17,12 +17,12 @@ router.get('/:id', (req, res) => {
     .getStudent(searchID)
     .then((studentQuery) => {
       console.log(studentQuery);
-      res.json({ info: studentQuery, pdsID: searchID });
-      // const studentStrand = studentQuery[0].strandID;
-      // strandModel.getStudentStrand(studentStrand).then((studentStrandQuery) => {
-      //   const strandVal = studentStrandQuery[0].strandName;
-      //   res.json({ info: studentQuery, strand: strandVal, pdsID: searchID });
-      // });
+      // res.json({ info: studentQuery, pdsID: searchID });
+      const studentStrand = studentQuery[0].strandID;
+      strandModel.getStudentStrand(studentStrand).then((studentStrandQuery) => {
+        const strandVal = studentStrandQuery[0].strandName;
+        res.json({ info: studentQuery, strand: strandVal, pdsID: searchID });
+      });
     })
     .catch((err) => {
       console.log(err);
