@@ -53,7 +53,7 @@ const student = {
     }); // end of promise
   },
 
-  getStudent(searchID) {
+  getStudent(userID) {
     return new Promise((resolve, reject) => {
       const sql = `
       SELECT PersonalDataSheet.*, Student.*, Father.*, Mother.*, Education.*, Address.*, Voucher.*, Uniform.*, User.*,
@@ -76,7 +76,7 @@ const student = {
             ON PersonalDataSheet.personalDataSheetID = Voucher.personalDataSheetID
           LEFT OUTER JOIN Uniform
             ON PersonalDataSheet.personalDataSheetID = Uniform.personalDataSheetID
-          WHERE User.userID = ${searchID}
+          WHERE User.userID = ${userID}
       `;
 
       connection.query(sql, (error, result) => {

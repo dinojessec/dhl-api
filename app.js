@@ -2,6 +2,8 @@ require('dotenv').config();
 
 const createError = require('http-errors');
 const express = require('express');
+const jwt = require('jsonwebtoken');
+const cors = require('cors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
@@ -14,6 +16,9 @@ const indexRouter = require('./routes/index');
 
 const app = express();
 
+// CORS
+app.use(cors());
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -21,11 +26,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // custom codes below
-
-// session
-// app.use(session({
-//   cookie: {}
-// }));
 
 const register = require('./routes/register');
 const profile = require('./routes/profile');
@@ -65,14 +65,32 @@ app.use((req, res, next) => {
   next();
 });
 
+// token verifier
+const verifier = (req, res, next) => {
+  if (!req.headers.authorization) {
+    return res.status(401).send('Unauthorized request. no token');
+  }
+  const token = req.headers.authorization.split(' ')[1];
+  if (token === null) {
+    return res.status(401).send('Unauthorized request. null token');
+  }
+  const payload = jwt.verify(token, 'thisSecretKey');
+  if (!payload) {
+    return res.status(401).send('Unauthorized request. no payload');
+  }
+  req.userID = payload.userID;
+  req.groupID = payload.groupID;
+  next();
+};
+
 app.use('/api/v1/', indexRouter);
 app.use('/api/v1/register', register);
-app.use('/api/v1/profile', profile);
+app.use('/api/v1/profile', verifier, profile);
 app.use('/api/v1/login', login);
 app.use('/api/v1/admin', admin);
-app.use('/api/v1/selectstrand', selectstrand);
-app.use('/api/v1/selectgradelevel', selectgradelevel);
-app.use('/api/v1/changepassword', changePassword);
+app.use('/api/v1/selectstrand', verifier, selectstrand);
+app.use('/api/v1/selectgradelevel', verifier, selectgradelevel);
+app.use('/api/v1/changepassword', verifier, changePassword);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

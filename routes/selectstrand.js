@@ -8,7 +8,7 @@ router.get('/', (req, res) => {
   strandModel
     .generateStrand()
     .then((result) => {
-      console.log(result);
+      // console.log(result);
       res.json({ result });
     })
     .catch((err) => {
@@ -18,8 +18,8 @@ router.get('/', (req, res) => {
 
 router.put('/', (req, res) => {
   const params = req.body;
-  //   console.log(params);
-  strandModel.updateStudentStrand(params).then((result) => {
+  const { userID } = req;
+  strandModel.updateStudentStrand(params, userID).then((result) => {
     console.log(result);
     res.json({ message: 'updated strand' });
   });

@@ -36,15 +36,15 @@ router.post('/', (req, res) => {
         } else {
           userModel.getPdsID(dbUserID).then((studentVal) => {
             const pdsVal = studentVal[0].personalDataSheetID;
-            const payload = { subject: dbUsername };
+            const payload = {
+              userID: dbUserID,
+              groupID: dbGroupID,
+              pdsID: pdsVal,
+            };
             const token = jwt.sign(payload, 'thisSecretKey', { expiresIn: '1d' });
             res.json({
               message: 'Login Success',
-              name: dbUsername,
-              id: pdsVal,
-              userID: dbUserID,
-              groupID: dbGroupID,
-              status: 200,
+              username: dbUsername,
               token,
             });
           });

@@ -56,12 +56,10 @@ const strand = {
       });
     });
   },
-  
-  updateStudentStrand(params) {
+
+  updateStudentStrand(params, userID) {
     return new Promise((resolve, reject) => {
-      const sql = `UPDATE Student SET strandID = ${params.newStrand.strandID} WHERE userID = ${
-        params.user
-      }`;
+      const sql = `UPDATE Student SET strandID = ${params.strandID} WHERE userID = ${userID}`;
       connection.query(sql, (err, result) => {
         if (typeof result !== 'undefined') {
           console.log('success');
