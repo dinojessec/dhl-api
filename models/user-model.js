@@ -5,21 +5,15 @@ const Cryptr = require('cryptr');
 const cryptr = new Cryptr('secretKey');
 
 const user = {
-  generateGroupID() {
-    const sql = 'SELECT * FROM dhl_db2.Group WHERE groupID = 1';
-
-    return sql;
-  },
-
-  generateUserID(params, groupIDQuery) {
+  generateUserID(params, roleIDQuery) {
     const userName = params.username;
     const passWord = params.password;
-    const decryptPassword = atob(passWord);
+    const decryptPassword = btoa(passWord);
     const encryptedPassword = cryptr.encrypt(decryptPassword);
 
     const sql = `
-          INSERT INTO User (userID, username, password, groupID)
-          VALUES (NULL, "${userName}", "${encryptedPassword}", ${groupIDQuery});
+          INSERT INTO User (userID, username, password, roleID)
+          VALUES (NULL, "${userName}", "${encryptedPassword}", ${roleIDQuery});
       `;
 
     return sql;
@@ -60,13 +54,14 @@ const user = {
       const atobPass = btoa(decryptPass);
       const sql = `SELECT STRCMP('${userInputPass}', '${atobPass}')`;
 
-      connection.query(sql, (err, result) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(result);
-        }
-      });
+      // connection.query(sql, (err, result) => {
+      //   if (err) {
+      //     reject(err);
+      //   } else {
+      //     resolve(result);
+      //   }
+      // });
+      resole(sql);
     });
   },
 };
