@@ -59,7 +59,7 @@ const strand = {
 
   updateStudentStrand(params, userID) {
     return new Promise((resolve, reject) => {
-      const sql = `UPDATE Student SET strandID = ${params.strandID} WHERE userID = ${userID}`;
+      const sql = `UPDATE Student SET strandID = '${params.strandID}' WHERE userID = ${userID}`;
       connection.query(sql, (err, result) => {
         if (typeof result !== 'undefined') {
           console.log('success');
