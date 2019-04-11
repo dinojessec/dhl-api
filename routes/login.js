@@ -1,6 +1,6 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
-const btoa = require('btoa');
+const atob = require('atob');
 const Cryptr = require('cryptr');
 
 const cryptr = new Cryptr('secretKey');
@@ -14,8 +14,7 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
   const params = req.body;
-  const userInputPassword = params.password;
-  //   console.log(params);
+  // console.log(params);
   userModel
     .checkUsername(params)
     .then((val) => {
@@ -24,27 +23,26 @@ router.post('/', (req, res) => {
         res.json({ message: 'username does not exist', status: 404 });
       }
       if (val) {
-        // console.log(val);
+        console.log('check user value', val);
         const dbUserID = val[0].userID;
-        const dbGroupID = val[0].groupID;
         const dbUsername = val[0].username;
         const dbPassword = val[0].password;
+        const dbRoleID = val[0].roleID;
         const decryptPass = cryptr.decrypt(dbPassword);
-        const atobPass = btoa(decryptPass);
-        if (userInputPassword !== atobPass) {
+        const atobPass = atob(decryptPass);
+        if (params.password !== atobPass) {
           res.json({ message: 'Invalid password', status: 404 });
         } else {
           userModel.getPdsID(dbUserID).then((studentVal) => {
             const pdsVal = studentVal[0].personalDataSheetID;
             const payload = {
               userID: dbUserID,
-              groupID: dbGroupID,
-              pdsID: pdsVal,
+              roleID: dbRoleID
             };
             const token = jwt.sign(payload, 'thisSecretKey', { expiresIn: '1d' });
             res.json({
-              message: 'Login Success',
               username: dbUsername,
+              userID: dbUserID,
               token,
             });
           });
