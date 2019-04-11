@@ -35,6 +35,9 @@ const selectstrand = require('./routes/selectstrand');
 const selectgradelevel = require('./routes/selectgradelevel');
 const changePassword = require('./routes/change-password');
 
+// verifiers
+const verifyProfile = require('./token/verifytoken');
+
 // uncomment after placing your favicon in /public
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -79,7 +82,7 @@ const verifier = (req, res, next) => {
     return res.status(401).send('Unauthorized request. no payload');
   }
   req.userID = payload.userID;
-  req.groupID = payload.groupID;
+  req.roleID = payload.roleID;
   next();
 };
 
