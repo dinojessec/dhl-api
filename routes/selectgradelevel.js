@@ -6,12 +6,12 @@ const studentModel = require('../models/student-model');
 
 router.put('/', (req, res) => {
   const params = req.body;
-  console.log(params);
+  const { userID } = req;
   studentModel
-    .updateGradeLevel(params)
+    .updateGradeLevel(params, userID)
     .then((response) => {
-      console.log(response);
-      res.json({ message: 'updated grade level' });
+      res.json({ message: 'update grade level' });
+      console.log('response', response);
     })
     .catch((e) => {
       console.log(e);
