@@ -90,7 +90,7 @@ app.use('/api/v1/', indexRouter);
 app.use('/api/v1/register', register);
 app.use('/api/v1/profile', verifier, profile);
 app.use('/api/v1/login', login);
-app.use('/api/v1/admin', admin);
+app.use('/api/v1/admin', verifier, admin);
 app.use('/api/v1/selectstrand', verifier, selectstrand);
 app.use('/api/v1/selectgradelevel', verifier, selectgradelevel);
 app.use('/api/v1/changepassword', verifier, changePassword);
