@@ -10,8 +10,8 @@ const student = {
   addStudent(params, pdsID, userID) {
     const sql = `INSERT INTO Student(studentID, personalDataSheetID, userID, firstName, middleName, lastName, dateRegistered)
                   VALUES(NULL, ${pdsID}, ${userID}, '${params.firstName}', '${
-  params.middleName
-}', '${params.lastName}', CURDATE());`;
+      params.middleName
+      }', '${params.lastName}', CURDATE());`;
 
     return sql;
   },
@@ -93,11 +93,11 @@ const student = {
     });
   },
 
-  updateGradeLevel(params) {
+  updateGradeLevel(params, userID) {
     return new Promise((resolve, reject) => {
-      const sql = `UPDATE Student SET gradeLevel = '${params.value}' WHERE userID = ${
-        params.userID
-      }`;
+      const sql = `UPDATE Student SET gradeLevel = '${params.selectedGradeLevel}' WHERE userID = ${
+        userID
+        }`;
 
       connection.query(sql, (err, result) => {
         if (err) {
@@ -106,7 +106,6 @@ const student = {
           resolve(result);
         }
       });
-      // resolve(sql);
     });
   },
 };
