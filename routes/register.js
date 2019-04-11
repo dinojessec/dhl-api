@@ -5,6 +5,7 @@ const router = express.Router();
 const studentModel = require('../models/student-model');
 const personalDataSheetModel = require('../models/personal-data-sheet-model');
 const userModel = require('../models/user-model');
+const roleModel = require('../models/role-model');
 const parentModel = require('../models/parent-model');
 const addressModel = require('../models/address-model');
 const educationModel = require('../models/education-model');
@@ -18,7 +19,8 @@ router.post('/', (req, res) => {
   const params = req.body;
 
   const pdsQuery = personalDataSheetModel.generatePdsID();
-  const groupQuery = userModel.generateGroupID();
+  const roleQuery = roleModel.generateRoleID();
+  console.log(roleQuery);
 
   function userCheck() {
     return userModel.checkUsername(params).then(val => val);
@@ -41,14 +43,15 @@ router.post('/', (req, res) => {
               const pdsID = pdsResult.insertId;
               console.log('pdsID=', pdsID);
 
-              connection.query(groupQuery, (groupErr, groupResult) => {
-                if (groupErr) {
+              connection.query(roleQuery, (roleErr, roleResult) => {
+                if (roleErr) {
                   res.json({ message: 'group Query error', status: 404 });
                   connection.rollback();
                 } else {
-                  const groupIDQuery = groupResult[0].groupID;
-                  console.log(groupIDQuery);
-                  const userQuery = userModel.generateUserID(params, groupIDQuery);
+                  console.log('rolequery', roleResult);
+                  const roleIDQuery = roleResult[0].roleID;
+                  console.log(roleIDQuery);
+                  const userQuery = userModel.generateUserID(params, roleIDQuery);
                   connection.query(userQuery, (userErr, userResult) => {
                     console.log(userErr);
                     console.log(userResult);
