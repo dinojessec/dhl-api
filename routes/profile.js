@@ -9,30 +9,32 @@ const fatherModel = require('../models/parent-model');
 const motherModel = require('../models/parent-model');
 const educationModel = require('../models/education-model');
 
-router.get('/', (req, res) => {
-  const { userID } = req;
-  const { groupID } = req;
-  console.log('userID', userID);
-  console.log('groupID', groupID);
-  studentModel
-    .getStudent(userID)
-    .then((studentQuery) => {
-      // console.log(studentQuery);
-      // res.json({ info: studentQuery, pdsID: searchID });
-      const studentStrand = studentQuery[0].strandID;
-      strandModel.getStudentStrand(studentStrand).then((studentStrandQuery) => {
-        const strandVal = studentStrandQuery[0].strandName;
-        res.json({
-          info: studentQuery,
-          strand: strandVal,
-          userID,
-          groupID,
+router.get('/:userID', (req, res) => {
+  const { roleID } = req;
+  if (roleID >= 1) {
+    const userID = req.params.userID;
+    studentModel
+      .getStudent(userID)
+      .then((studentQuery) => {
+        // console.log(studentQuery);
+
+        const studentStrand = studentQuery[0].strandID;
+        strandModel.getStudentStrand(studentStrand).then((studentStrandQuery) => {
+          const strandResult = studentStrandQuery[0].strandName;
+          console.log('asjkdfhljahd', studentStrandQuery);
+          console.log('strand val', strandResult);
+          res.json({
+            info: studentQuery,
+            strandResult,
+            userID,
+            roleID,
+          });
         });
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  }
 });
 
 // still pending. update student info still not working
