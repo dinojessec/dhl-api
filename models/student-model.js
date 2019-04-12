@@ -108,6 +108,20 @@ const student = {
       });
     });
   },
+
+  getRoleID(userID) {
+    return new Promise((resolve, reject) => {
+      const sql = `SELECT roleID FROM Student WHERE userID = ${userID}`;
+
+      connection.query(sql, (err, result) => {
+        if (err) {
+          console.log('get roleID error', err);
+        } else {
+          resolve(result);
+        }
+      });
+    })
+  }
 };
 
 module.exports = student;
