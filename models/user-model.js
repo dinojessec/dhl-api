@@ -33,7 +33,7 @@ const user = {
     });
   },
 
-  getPdsID(userID) {
+  getStudentInfo(userID) {
     return new Promise((resolve, reject) => {
       const sql = `SELECT * FROM Student WHERE userID = ${userID}`;
 
