@@ -17,19 +17,23 @@ router.get('/:userID', (req, res) => {
       .getStudent(userID)
       .then((studentQuery) => {
         // console.log(studentQuery);
-
         const studentStrand = studentQuery[0].strandID;
-        strandModel.getStudentStrand(studentStrand).then((studentStrandQuery) => {
-          const strandResult = studentStrandQuery[0].strandName;
-          console.log('asjkdfhljahd', studentStrandQuery);
-          console.log('strand val', strandResult);
-          res.json({
-            info: studentQuery,
-            strandResult,
-            userID,
-            roleID,
+        console.log(studentStrand);
+        if (studentStrand !== null) {
+          strandModel.getStudentStrand(studentStrand).then((studentStrandQuery) => {
+            const strandResult = studentStrandQuery[0].strandName;
+            console.log('asjkdfhljahd', studentStrandQuery);
+            console.log('strand val', strandResult);
+            res.json({
+              info: studentQuery,
+              strandResult,
+              userID,
+              roleID,
+            });
           });
-        });
+        } else {
+          res.json({ info: studentQuery, userID, roleID });
+        }
       })
       .catch((err) => {
         console.log(err);
