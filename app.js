@@ -34,9 +34,7 @@ const admin = require('./routes/admin');
 const selectstrand = require('./routes/selectstrand');
 const selectgradelevel = require('./routes/selectgradelevel');
 const changePassword = require('./routes/change-password');
-
-// verifiers
-const verifyProfile = require('./token/verifytoken');
+const user = require('./routes/user');
 
 // uncomment after placing your favicon in /public
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -94,6 +92,7 @@ app.use('/api/v1/admin', verifier, admin);
 app.use('/api/v1/selectstrand', verifier, selectstrand);
 app.use('/api/v1/selectgradelevel', verifier, selectgradelevel);
 app.use('/api/v1/changepassword', verifier, changePassword);
+app.use('/api/v1/user', user);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
