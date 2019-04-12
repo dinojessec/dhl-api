@@ -7,6 +7,7 @@ const cryptr = new Cryptr('secretKey');
 const router = express.Router();
 
 const userModel = require('../models/user-model');
+const studentModel = require('../models/student-model');
 
 router.get('/', (req, res) => {
   res.json({ message: 'test message' });
@@ -27,22 +28,22 @@ router.post('/', (req, res) => {
         const dbUserID = val[0].userID;
         const dbUsername = val[0].username;
         const dbPassword = val[0].password;
-        const dbRoleID = val[0].roleID;
         const decryptPass = cryptr.decrypt(dbPassword);
         const atobPass = atob(decryptPass);
         if (params.password !== atobPass) {
           res.json({ message: 'Invalid password', status: 404 });
         } else {
-          userModel.getPdsID(dbUserID).then((studentVal) => {
-            const pdsVal = studentVal[0].personalDataSheetID;
+          studentModel.getRoleID(dbUserID).then((response) => {
+            const userIDfromQuery = response[0].roleID
             const payload = {
               userID: dbUserID,
-              roleID: dbRoleID
+              roleID: userIDfromQuery
             };
             const token = jwt.sign(payload, 'thisSecretKey', { expiresIn: '1d' });
             res.json({
               username: dbUsername,
               userID: dbUserID,
+              roleID: userIDfromQuery,
               token,
             });
           });
