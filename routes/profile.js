@@ -42,13 +42,15 @@ router.get('/:userID', (req, res) => {
 });
 
 // still pending. update student info still not working
-router.put('/', (req, res) => {
+router.put('/:userID', (req, res) => {
+  const userID = req.params.userID;
   const params = req.body;
+  // console.log('userID userID', userID);
   // console.log(params);
 
-  studentModel.updateStudent(params).then((profileTab) => {
-    const profileVal = profileTab;
-    console.log(profileVal);
+  studentModel.updateStudent(params).then((studentTable) => {
+    console.log(studentTable);
+    res.json({ studentTable });
   });
 
   // const addressSql = await addressModel.updateAddress(params).then(val => val);
@@ -62,17 +64,5 @@ router.put('/', (req, res) => {
   // console.log(educationSql);
 });
 
-// router.get('/:id/strand', (req, res) => {
-//   strandModel.generateStrand().then((strandModelResult) => {
-//     const strandData = strandModelResult;
-//     console.log('test', strandData);
-//     // res.json({ strandData });
-//   });
-// });
-
-router.put('/strand/', (req, res) => {
-  const params = req.body;
-  console.log(params);
-});
 
 module.exports = router;

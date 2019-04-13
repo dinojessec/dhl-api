@@ -8,48 +8,47 @@ const student = {
   // },
 
   addStudent(params, pdsID, userID) {
-    const sql = `INSERT INTO Student(studentID, personalDataSheetID, userID, firstName, middleName, lastName, dateRegistered)
+    const sql = `INSERT INTO Student(studentID, personalDataSheetID, userID, firstName, middleName, lastName, dateRegistered, status)
                   VALUES(NULL, ${pdsID}, ${userID}, '${params.firstName}', '${
       params.middleName
-      }', '${params.lastName}', CURDATE());`;
+      }', '${params.lastName}', CURDATE(), 'pending');`;
 
     return sql;
   },
 
   updateStudent(params) {
     return new Promise((resolve) => {
-      const input = params;
       const sql = `UPDATE Student
                     SET 
-                        firstName = '${input.firstName}',
-                        middleName = '${input.middleName}',
-                        lastName = '${input.lastName}',
-                        LRN = ${input.LRN},
-                        gradeLevel = '${input.gradeLevel}',
-                        strandID = ${input.strandID},
-                        mobileNumber = ${input.mobileNumber},
-                        landlineNumber = ${input.landlineNumber},
-                        birthday = '${input.birthday}',
-                        gender = '${input.gender}',
-                        guardian = '${input.guardian}',
-                        religion = '${input.religion}',
-                        motherTongue = '${input.motherTongue}',
-                        ethnicGroup = '${input.ethnicGroup}',
-                        referredBy = '${input.referredBy}',
-                        preferredShift = '${input.preferredShift}',
-                        preferredCourse = '${input.preferredCourse}'
+                        firstName = '${params.firstName}',
+                        middleName = '${params.middleName}',
+                        lastName = '${params.lastName}',
+                        LRN = ${params.LRN},
+                        gradeLevel = '${params.gradeLevel}',
+                        strandID = ${params.strandID},
+                        mobileNumber = ${params.mobileNumber},
+                        landlineNumber = ${params.landlineNumber},
+                        birthday = '${params.birthday}',
+                        gender = '${params.gender}',
+                        guardian = '${params.guardian}',
+                        religion = '${params.religion}',
+                        motherTongue = '${params.motherTongue}',
+                        ethnicGroup = '${params.ethnicGroup}',
+                        referredBy = '${params.referredBy}',
+                        preferredShift = '${params.preferredShift}',
+                        preferredCourse = '${params.preferredCourse}'
                     WHERE
-                        studentID = ${input.studentID}`;
+                        userID = ${params.userID}`;
 
       connection.query(sql, (error, results) => {
-        if (results !== 'undefined') {
-          resolve(results);
+        if (error) {
+          console.log('update student error', error);
         } else {
-          console.log('Value Undefined', error);
+          resolve(results);
         }
       });
-      // console.log('query', sql);
       // resolve(sql);
+      console.log(sql);
     }); // end of promise
   },
 
@@ -58,7 +57,7 @@ const student = {
       const sql = `
       SELECT PersonalDataSheet.*, Student.*, Father.*, Mother.*, Education.*, Address.*, Voucher.*, Uniform.*, User.*,
         TIMESTAMPDIFF(YEAR,birthday,CURDATE()) AS age,
-        DATE_FORMAT(birthday,'%d/%M/%Y') AS formatedBirthday 
+        DATE_FORMAT(birthday,'%Y/%m/%d') AS formatedBirthday 
           FROM User
           LEFT OUTER JOIN Student
             ON Student.userID = User.userID
