@@ -5,15 +5,15 @@ const Cryptr = require('cryptr');
 const cryptr = new Cryptr('secretKey');
 
 const user = {
-  generateUserID(params, roleIDQuery) {
+  generateUserID(params) {
     const userName = params.username;
     const passWord = params.password;
     const decryptPassword = btoa(passWord);
     const encryptedPassword = cryptr.encrypt(decryptPassword);
 
     const sql = `
-          INSERT INTO User (userID, username, password, roleID)
-          VALUES (NULL, "${userName}", "${encryptedPassword}", ${roleIDQuery});
+          INSERT INTO User (userID, username, password)
+          VALUES (NULL, "${userName}", "${encryptedPassword}");
       `;
 
     return sql;

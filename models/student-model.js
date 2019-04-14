@@ -8,8 +8,8 @@ const student = {
   // },
 
   addStudent(params, pdsID, userID) {
-    const sql = `INSERT INTO Student(studentID, personalDataSheetID, userID, firstName, middleName, lastName, dateRegistered, status)
-                  VALUES(NULL, ${pdsID}, ${userID}, '${params.firstName}', '${
+    const sql = `INSERT INTO Student(studentID, personalDataSheetID, userID, roleID, firstName, middleName, lastName, dateRegistered, status)
+                  VALUES(NULL, ${pdsID}, ${userID}, 1, '${params.firstName}', '${
       params.middleName
       }', '${params.lastName}', CURDATE(), 'pending');`;
 
