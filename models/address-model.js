@@ -8,7 +8,7 @@ const address = {
     return new Promise((resolve, reject) => {
       const sql = `UPDATE Address
       SET 
-          homeAddress = '${params.homeNumber}',
+          homeNumber = '${params.homeNumber}',
           streetName = '${params.streetName}',
           barangay = '${params.barangay}',
           town = '${params.town}',

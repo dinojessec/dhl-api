@@ -26,6 +26,7 @@ const student = {
                         LRN = ${params.LRN},
                         gradeLevel = '${params.gradeLevel}',
                         strandID = ${params.strandID},
+                        email = '${params.email}',
                         mobileNumber = ${params.mobileNumber},
                         landlineNumber = ${params.landlineNumber},
                         birthday = '${params.birthday}',
@@ -40,13 +41,13 @@ const student = {
                     WHERE
                         userID = ${params.userID}`;
 
-      connection.query(sql, (error, results) => {
-        if (error) {
-          console.log('update student error', error);
-        } else {
-          resolve(results);
-        }
-      });
+      // connection.query(sql, (error, results) => {
+      //   if (error) {
+      //     console.log('update student error', error);
+      //   } else {
+      //     resolve(results);
+      //   }
+      // });
       // resolve(sql);
       console.log(sql);
     }); // end of promise
