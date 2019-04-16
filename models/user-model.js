@@ -64,6 +64,20 @@ const user = {
       resole(sql);
     });
   },
+
+  getApprover(userID) {
+    return new Promise((resolve, reject) => {
+      const sql = `SELECT username FROM User WHERE userID = ${userID}`
+
+      connection.query(sql, (err, result) => {
+        if (err) {
+          console.log('get approver error', err);
+        } else {
+          resolve(result);
+        }
+      });
+    })
+  }
 };
 
 module.exports = user;
