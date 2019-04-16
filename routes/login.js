@@ -24,7 +24,7 @@ router.post('/', (req, res) => {
         res.json({ message: 'username does not exist', status: 404 });
       }
       if (val) {
-        console.log('check user value', val);
+        // console.log('check user value', val);
         const dbUserID = val[0].userID;
         const dbUsername = val[0].username;
         const dbPassword = val[0].password;
