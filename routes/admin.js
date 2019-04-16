@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const strandModel = require('../models/strand-model');
+const studentModel = require('../models/student-model');
 
 router.get('/strand', (req, res) => {
   const { roleID } = req;
@@ -40,6 +41,18 @@ router.put('/strand', (req, res) => {
       console.log('update strand error');
     }
   });
+});
+
+router.get('/student', (req, res) => {
+  const { roleID } = req;
+  if (roleID < 2) {
+    console.log(`user notallowed to access`);
+  } else {
+    studentModel.getAllStudent().then(response => {
+      console.log(response);
+      res.json({ response });
+    })
+  }
 });
 
 module.exports = router;
