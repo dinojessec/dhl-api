@@ -2,11 +2,11 @@ const express = require('express');
 
 const router = express.Router();
 
+const userModel = require('../models/user-model');
 const strandModel = require('../models/strand-model');
 const studentModel = require('../models/student-model');
 const addressModel = require('../models/address-model');
-const fatherModel = require('../models/parent-model');
-const motherModel = require('../models/parent-model');
+const parentModel = require('../models/parent-model');
 const educationModel = require('../models/education-model');
 
 router.get('/:userID', (req, res) => {
@@ -18,7 +18,6 @@ router.get('/:userID', (req, res) => {
       .then((studentQuery) => {
         // console.log(studentQuery);
         const studentStrand = studentQuery[0].strandID;
-        console.log(studentStrand);
         if (studentStrand !== null) {
           strandModel.getStudentStrand(studentStrand).then((studentStrandQuery) => {
             const strandResult = studentStrandQuery[0].strandName;
@@ -49,19 +48,40 @@ router.put('/:userID', (req, res) => {
   // console.log(params);
 
   studentModel.updateStudent(params).then((studentTable) => {
-    console.log(studentTable);
-    res.json({ studentTable });
+
+    addressModel.updateAddress(params).then(addressTable => {
+
+      parentModel.updateFather(params).then(fatherTable => {
+
+        parentModel.updateMother(params).then(motherTable => {
+
+          educationModel.updateEducation(params).then(educationTable => {
+            console.log(studentTable);
+            console.log(addressTable);
+            console.log(fatherTable);
+            console.log(motherTable);
+            console.log(educationTable);
+            res.json({ studentTable, addressTable, fatherTable, motherTable, educationTable });
+          })
+        })
+      })
+    })
   });
 
-  // const addressSql = await addressModel.updateAddress(params).then(val => val);
-  // const fatherSql = await fatherModel.updateFather(params).then(val => val);
-  // const motherSql = await motherModel.updateMother(params).then(val => val);
-  // const educationSql = await educationModel.updateEducation(params).then(val => val);
-  // console.log('student query', studentSql);
-  // console.log(addressSql);
-  // console.log(fatherSql);
-  // console.log(motherSql);
-  // console.log(educationSql);
+});
+
+router.put('/:userID/approve', (req, res) => {
+  const { userID } = req;
+  const studentUserID = req.params.userID;
+
+  userModel.getApprover(userID).then(response => {
+    const username = response[0].username;
+    console.log('username username', username);
+    studentModel.approveStudent(username, studentUserID).then(response => {
+      console.log(response);
+      res.json({ response });
+    })
+  })
 });
 
 

@@ -21,14 +21,14 @@ const education = {
                     WHERE
                         personalDataSheetID = ${params.personalDataSheetID}`;
 
-      // connection.query(sql, (error, results) => {
-      //   if (typeof results !== 'undefined') {
-      //     resolve(results);
-      //   } else {
-      //     console.log('Value Undefined' error);
-      //   }
-      // });
-      resolve(sql);
+      connection.query(sql, (error, results) => {
+        if (typeof results !== 'undefined') {
+          resolve(results);
+        } else {
+          console.log('Value Undefined', error);
+        }
+      });
+      // resolve(sql);
     });
   },
 };

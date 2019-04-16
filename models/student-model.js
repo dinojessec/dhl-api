@@ -41,15 +41,14 @@ const student = {
                     WHERE
                         userID = ${params.userID}`;
 
-      // connection.query(sql, (error, results) => {
-      //   if (error) {
-      //     console.log('update student error', error);
-      //   } else {
-      //     resolve(results);
-      //   }
-      // });
+      connection.query(sql, (error, results) => {
+        if (error) {
+          console.log('update student error', error);
+        } else {
+          resolve(results);
+        }
+      });
       // resolve(sql);
-      console.log(sql);
     }); // end of promise
   },
 
@@ -58,7 +57,7 @@ const student = {
       const sql = `
       SELECT PersonalDataSheet.*, Student.*, Father.*, Mother.*, Education.*, Address.*, Voucher.*, Uniform.*, User.*,
         TIMESTAMPDIFF(YEAR,birthday,CURDATE()) AS age,
-        DATE_FORMAT(birthday,'%Y/%m/%d') AS formatedBirthday 
+        DATE_FORMAT(birthday,'%Y/%m/%d') AS birthday 
           FROM User
           LEFT OUTER JOIN Student
             ON Student.userID = User.userID
@@ -121,7 +120,36 @@ const student = {
         }
       });
     })
+  },
+
+  getAllStudent() {
+    return new Promise(resolve => {
+      const sql = `SELECT *, TIMESTAMPDIFF(YEAR,birthday,CURDATE()) AS age FROM Student LEFT JOIN Strand ON Student.strandID = Strand.strandID WHERE roleID = 1`;
+
+      connection.query(sql, (err, result) => {
+        if (err) {
+          console.log(`get student error ${err}`);
+        } else {
+          resolve(result);
+        }
+      });
+    })
+  },
+
+  approveStudent(username, studentUserID) {
+    return new Promise((resolve, reject) => {
+      const sql = `UPDATE Student SET approvedBy = '${username}', status = 'approved' WHERE userID = ${studentUserID}`;
+
+      connection.query(sql, (err, result) => {
+        if (err) {
+          console.log('approve student error', err);
+        } else {
+          resolve(result);
+        }
+      });
+    })
   }
+
 };
 
 module.exports = student;

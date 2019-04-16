@@ -12,19 +12,19 @@ const address = {
           streetName = '${params.streetName}',
           barangay = '${params.barangay}',
           town = '${params.town}',
-          city = '${params.city}',
+          city = '${params.city}'
       WHERE
           personalDataSheetID = ${params.personalDataSheetID}`;
 
-      // connection.query(sql, (error, results) => {
-      //   if (typeof results !== 'undefined') {
-      //     resolve(results);
-      //   } else {
-      //     reject(error);
-      //     console.log('error on update address');
-      //   }
-      // });
-      resolve(sql);
+      connection.query(sql, (error, results) => {
+        if (typeof results !== 'undefined') {
+          resolve(results);
+        } else {
+          reject(error);
+          console.log('error on update address');
+        }
+      });
+      // resolve(sql);
     });
   },
 };
