@@ -39,7 +39,7 @@ router.post('/', (req, res) => {
               userID: dbUserID,
               roleID: userIDfromQuery
             };
-            const token = jwt.sign(payload, 'thisSecretKey', { expiresIn: '1d' });
+            const token = jwt.sign(payload, 'thisSecretKey', { expiresIn: '12h' });
             res.json({
               username: dbUsername,
               userID: dbUserID,
