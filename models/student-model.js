@@ -162,6 +162,20 @@ const student = {
         }
       });
     })
+  },
+
+  getPdsID(userID) {
+    return new Promise((resolve) => {
+      const sql = `SELECT personalDataSheetID FROM Student WHERE userID = ${userID}`;
+
+      connection.query(sql, (err, result) => {
+        if (err) {
+          console.log(`error getting pdsID ${err}`);
+        } else {
+          resolve(result);
+        }
+      })
+    })
   }
 
 };

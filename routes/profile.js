@@ -8,6 +8,7 @@ const studentModel = require('../models/student-model');
 const addressModel = require('../models/address-model');
 const parentModel = require('../models/parent-model');
 const educationModel = require('../models/education-model');
+const voucherModel = require('../models/voucher-model');
 
 router.get('/:userID', (req, res) => {
   const { roleID } = req;
@@ -78,6 +79,20 @@ router.put('/:userID/approve', (req, res) => {
     studentModel.approveStudent(username, studentUserID).then(response => {
       console.log(response);
       res.json({ response });
+    })
+  })
+});
+
+router.put('/student-payment/:userID', (req, res) => {
+  const userID = req.params.userID;
+  const data = req.body.data;
+  studentModel.getPdsID(userID).then(response => {
+    const pdsID = response[0].personalDataSheetID;
+    educationModel.getSchoolType(pdsID).then(response => {
+      const type = response[0].schoolType;
+      voucherModel.updateVoucher(type, data, pdsID).then(response => {
+        res.json({ response });
+      });
     })
   })
 });

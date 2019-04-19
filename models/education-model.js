@@ -32,6 +32,20 @@ const education = {
       // resolve(sql);
     });
   },
+
+  getSchoolType(pdsID) {
+    return new Promise((resolve, reject) => {
+      const sql = `SELECT schoolType FROM Education WHERE personalDataSheetID = ${pdsID}`;
+
+      connection.query(sql, (err, result) => {
+        if (err) {
+          console.log(`error getting shool type ${err}`);
+        } else {
+          resolve(result)
+        }
+      });
+    })
+  }
 };
 
 module.exports = education;
