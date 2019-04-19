@@ -55,4 +55,18 @@ router.get('/student', (req, res) => {
   }
 });
 
+router.get('/checkout/:userID', (req, res) => {
+  const { roleID } = req;
+  const userID = req.params.userID;
+  if (roleID < 2) {
+    console.log(`user notallowed to access`);
+  } else {
+    studentModel.getStudentCheckout(userID).then(response => {
+      const resVal = response[0];
+      res.json({ resVal });
+      console.log(resVal);
+    })
+  }
+});
+
 module.exports = router;
