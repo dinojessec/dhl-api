@@ -17,17 +17,18 @@ const education = {
                       jhsLocation = '${params.jhsLocation}',
                       schoolType = '${params.schoolType}',
                       organization = '${params.organization}',
-                      orgAward = '${params.orgAward}',
+                      orgAward = '${params.orgAward}'
                     WHERE
                         personalDataSheetID = ${params.personalDataSheetID}`;
 
       connection.query(sql, (error, results) => {
-        if (typeof results !== 'undefined') {
-          resolve(results);
-        } else {
+        if (error) {
           console.log('Value Undefined', error);
+        } else {
+          resolve(results);
         }
       });
+      // console.log(sql);
       // resolve(sql);
     });
   },
