@@ -35,17 +35,18 @@ const parent = {
                        fatherSchoolGraduated = '${params.fatherSchoolGraduated}',
                        fatherReligion = '${params.fatherReligion}',
                        fatherMobileNumber = ${params.fatherMobileNumber},
-                       fatherLandlineNumber = ${params.fatherLandlineNumber},
+                       fatherLandlineNumber = ${params.fatherLandlineNumber}
                     WHERE
                         personalDataSheetID = ${params.personalDataSheetID}`;
 
       connection.query(sql, (error, results) => {
-        if (typeof results !== 'undefined') {
-          resolve(results);
-        } else {
+        if (error) {
           console.log('Value Undefined', error);
+        } else {
+          resolve(results);
         }
       });
+      // console.log(sql);
       // resolve(sql);
     });
   },
@@ -67,15 +68,15 @@ const parent = {
                        motherSchoolGraduated = '${params.motherSchoolGraduated}',
                        motherReligion = '${params.motherReligion}',
                        motherMobileNumber = ${params.motherMobileNumber},
-                       motherLandlineNumber = ${params.motherLandlineNumber},
+                       motherLandlineNumber = ${params.motherLandlineNumber}
                     WHERE
                         personalDataSheetID = ${params.personalDataSheetID}`;
 
       connection.query(sql, (error, results) => {
-        if (typeof results !== 'undefined') {
-          resolve(results);
-        } else {
+        if (error) {
           console.log('Value Undefined', error);
+        } else {
+          resolve(results);
         }
       });
       // resolve(sql);
