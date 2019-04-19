@@ -1,7 +1,7 @@
 const role = {
     generateRoleID(roleID) {
         return new Promise((resolve, reject) => {
-            const sql = `SELECT Student.studentID, Student.firstName, Student.middleName, Student.lastName, Role.roleID, Role.roleName
+            const sql = `SELECT Student.studentID, Student.userID, Student.firstName, Student.middleName, Student.lastName, Role.roleID, Role.roleName
                         FROM Role
                             LEFT JOIN Student
                                 ON Role.roleID = Student.roleID
