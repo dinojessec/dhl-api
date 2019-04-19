@@ -21,8 +21,6 @@ router.get('/:userID', (req, res) => {
         if (studentStrand !== null) {
           strandModel.getStudentStrand(studentStrand).then((studentStrandQuery) => {
             const strandResult = studentStrandQuery[0].strandName;
-            console.log('asjkdfhljahd', studentStrandQuery);
-            console.log('strand val', strandResult);
             res.json({
               info: studentQuery,
               strandResult,
@@ -42,7 +40,7 @@ router.get('/:userID', (req, res) => {
 
 // still pending. update student info still not working
 router.put('/:userID', (req, res) => {
-  const userID = req.params.userID;
+  // const userID = req.params.userID;
   const params = req.body;
   // console.log('userID userID', userID);
   // console.log(params);
@@ -56,11 +54,11 @@ router.put('/:userID', (req, res) => {
         parentModel.updateMother(params).then(motherTable => {
 
           educationModel.updateEducation(params).then(educationTable => {
-            console.log(studentTable);
-            console.log(addressTable);
-            console.log(fatherTable);
-            console.log(motherTable);
-            console.log(educationTable);
+            // console.log(studentTable);
+            // console.log(addressTable);
+            // console.log(fatherTable);
+            // console.log(motherTable);
+            // console.log(educationTable);
             res.json({ studentTable, addressTable, fatherTable, motherTable, educationTable });
           })
         })
