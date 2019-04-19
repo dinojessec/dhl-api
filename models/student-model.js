@@ -148,6 +148,20 @@ const student = {
         }
       });
     })
+  },
+
+  getStudentCheckout(userID) {
+    return new Promise((resolve, reject) => {
+      const sql = `SELECT *, DATE_FORMAT(dateRegistered,'%M/%d/%Y') AS checkoutDate FROM Student LEFT JOIN Strand ON Student.strandID = Strand.strandID WHERE Student.userID = 1
+      `
+      connection.query(sql, (err, result) => {
+        if (err) {
+          console.log(`error on get student checkout ${err}`);
+        } else {
+          resolve(result)
+        }
+      });
+    })
   }
 
 };
