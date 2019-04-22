@@ -9,6 +9,20 @@ const addressModel = require('../models/address-model');
 const parentModel = require('../models/parent-model');
 const educationModel = require('../models/education-model');
 const voucherModel = require('../models/voucher-model');
+const jhsModel = require('../models/jhs-grades');
+
+// load strand list
+router.get('/strand', (req, res) => {
+  strandModel
+    .generateStrand()
+    .then((result) => {
+      // console.log(result);
+      res.json({ result });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
 
 router.get('/:userID', (req, res) => {
   const { roleID } = req;
@@ -43,8 +57,8 @@ router.get('/:userID', (req, res) => {
 router.put('/:userID', (req, res) => {
   // const userID = req.params.userID;
   const params = req.body;
-  // console.log('userID userID', userID);
-  // console.log(params);
+  const grades = params.grades;
+  // console.log(grades);
 
   studentModel.updateStudent(params).then((studentTable) => {
 
@@ -55,16 +69,16 @@ router.put('/:userID', (req, res) => {
         parentModel.updateMother(params).then(motherTable => {
 
           educationModel.updateEducation(params).then(educationTable => {
-            // console.log(studentTable);
-            // console.log(addressTable);
-            // console.log(fatherTable);
-            // console.log(motherTable);
-            // console.log(educationTable);
-            res.json({ studentTable, addressTable, fatherTable, motherTable, educationTable });
-          })
-        })
-      })
-    })
+
+            console.log(educationTable);
+            // jhsModel.updateGrades(grades, params).then(jhsTable => {
+            //   console.log(jhsTable);
+            //   res.json({ studentTable, addressTable, fatherTable, motherTable, educationTable, jhsTable });
+            // })
+          });
+        });
+      });
+    });
   });
 
 });
@@ -95,6 +109,18 @@ router.put('/student-payment/:userID', (req, res) => {
       });
     })
   })
+});
+
+router.get('/student-payment/:userID', (req, res) => {
+  const userID = req.params.userID;
+
+  studentModel.getPdsID(userID).then(response => {
+    const pdsID = response[0].personalDataSheetID;
+    voucherModel.getVoucher(pdsID).then(response => {
+      const voucherRes = response[0];
+      res.json({ voucherRes });
+    });
+  });
 });
 
 
