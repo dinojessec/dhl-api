@@ -57,7 +57,9 @@ const student = {
       const sql = `
       SELECT PersonalDataSheet.*, Student.*, Father.*, Mother.*, Education.*, Address.*, Voucher.*, Uniform.*, User.*,
         TIMESTAMPDIFF(YEAR,birthday,CURDATE()) AS age,
-        DATE_FORMAT(birthday,'%Y/%m/%d') AS birthday 
+        DATE_FORMAT(birthday,'%Y/%m/%d') AS birthday,
+        DATE_FORMAT(jhsYear,'%Y-%M') AS formattedJhsYear,
+        DATE_FORMAT(elemYear,'%Y-%M') AS formattedElemYear
           FROM User
           LEFT OUTER JOIN Student
             ON Student.userID = User.userID
@@ -75,6 +77,8 @@ const student = {
             ON PersonalDataSheet.personalDataSheetID = Voucher.personalDataSheetID
           LEFT OUTER JOIN Uniform
             ON PersonalDataSheet.personalDataSheetID = Uniform.personalDataSheetID
+          LEFT OUTER JOIN jhsGrades
+            ON PersonalDataSheet.personalDataSheetID = jhsGrades.personalDataSheetID
           WHERE User.userID = ${userID}
       `;
 
@@ -124,7 +128,17 @@ const student = {
 
   getAllStudent() {
     return new Promise(resolve => {
-      const sql = `SELECT *, TIMESTAMPDIFF(YEAR,birthday,CURDATE()) AS age FROM Student LEFT JOIN Strand ON Student.strandID = Strand.strandID WHERE roleID = 1`;
+      const sql = `SELECT *,
+                    TIMESTAMPDIFF(YEAR,birthday,CURDATE()) AS age,
+                    DATE_FORMAT(jhsYear,'%Y-%M') AS formattedJhsYear
+                      FROM Student
+                        LEFT JOIN jhsGrades
+                          ON Student.personalDataSheetID = jhsGrades.personalDataSheetID
+                        LEFT JOIN Education
+                          ON Student.personalDataSheetID = Education.personalDataSheetID
+                        LEFT JOIN Strand 
+                          ON Student.strandID = Strand.strandID 
+                        WHERE roleID = 1`;
 
       connection.query(sql, (err, result) => {
         if (err) {
