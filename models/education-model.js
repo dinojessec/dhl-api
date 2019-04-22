@@ -9,15 +9,18 @@ const education = {
       const sql = `UPDATE Education
                     SET
                       elementary = '${params.elementary}',
-                      elemYear = ${params.elemYear},
+                      elemYear = '${params.elemYear}',
                       elemHonor = '${params.elemHonor}',
                       juniorHighSchool = '${params.juniorHighSchool}',
-                      jhsYear = ${params.jhsYear},
+                      jhsYear = '${params.jhsYear}',
                       jhsHonor = '${params.jhsHonor}',
                       jhsLocation = '${params.jhsLocation}',
                       schoolType = '${params.schoolType}',
                       organization = '${params.organization}',
-                      orgAward = '${params.orgAward}'
+                      orgAward = '${params.orgAward}',
+                      als = '${params.als}',
+                      pept = '${params.pept}',
+                      nc = '${params.nc}'
                     WHERE
                         personalDataSheetID = ${params.personalDataSheetID}`;
 
@@ -28,7 +31,7 @@ const education = {
           resolve(results);
         }
       });
-      // console.log(sql);
+      console.log(sql);
       // resolve(sql);
     });
   },
