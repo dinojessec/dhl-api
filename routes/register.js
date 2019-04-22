@@ -12,6 +12,7 @@ const paymentModel = require('../models/payment-model');
 const voucherModel = require('../models/voucher-model');
 const documentModel = require('../models/document-model');
 const uniformModel = require('../models/uniform-model');
+const jhsModel = require('../models/jhs-grades');
 
 // POST /students
 router.post('/', (req, res) => {
@@ -164,12 +165,26 @@ router.post('/', (req, res) => {
                                                                   'uniformID=',
                                                                   uniformID,
                                                                 );
-                                                                res.json({
-                                                                  message:
-                                                                    'Account Created. Please log-in to your account',
-                                                                  status: 200,
+                                                                const jhsGradesQuery = jhsModel.addGrades(pdsID);
+                                                                connection.query(jhsGradesQuery, (jhsErr, jhsResult) => {
+                                                                  if (jhsErr) {
+                                                                    connection.rollback();
+                                                                    res.json({
+                                                                      message:
+                                                                        'Uniform query error',
+                                                                      status: 404,
+                                                                    });
+                                                                  } else {
+                                                                    const jhsGradesID = jhsResult.insertId;
+                                                                    console.log('jhs GradesID', jhsGradesID);
+                                                                    res.json({
+                                                                      message:
+                                                                        'Account Created. Please log-in to your account',
+                                                                      status: 200,
+                                                                    });
+                                                                    connection.commit();
+                                                                  }
                                                                 });
-                                                                connection.commit();
                                                               }
                                                             },
                                                           );
