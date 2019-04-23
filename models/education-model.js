@@ -31,7 +31,7 @@ const education = {
           resolve(results);
         }
       });
-      console.log(sql);
+      // console.log(sql);
       // resolve(sql);
     });
   },

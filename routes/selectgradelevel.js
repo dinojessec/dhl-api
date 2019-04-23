@@ -7,6 +7,8 @@ const studentModel = require('../models/student-model');
 router.put('/', (req, res) => {
   const params = req.body;
   const { userID } = req;
+  console.log(params);
+  console.log(userID);
   studentModel
     .updateGradeLevel(params, userID)
     .then((response) => {

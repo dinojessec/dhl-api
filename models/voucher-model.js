@@ -16,6 +16,20 @@ const voucher = {
         }
       })
     })
+  },
+
+  getVoucher(pdsID) {
+    return new Promise(resolve => {
+      const sql = `SELECT * FROM Voucher WHERE personalDataSheetID = ${pdsID}`;
+
+      connection.query(sql, (err, result) => {
+        if (err) {
+          console.log('get voucher error', err);
+        } else {
+          resolve(result);
+        }
+      })
+    })
   }
 };
 

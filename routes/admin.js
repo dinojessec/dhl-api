@@ -55,6 +55,34 @@ router.get('/student', (req, res) => {
   }
 });
 
+// get student based on strand
+router.get('/student/strand/:strandID', (req, res) => {
+  const strandID = req.params.strandID;
+  console.log('strand id =======', strandID);
+  const { roleID } = req;
+  if (roleID < 2) {
+    console.log(`user not allowed to access`);
+  } else {
+    strandModel.getStrand(strandID).then(response => {
+      console.log(response);
+      res.json({ response });
+    })
+  }
+})
+// get student based on grade level
+router.get('/student/gradelevel/:grade', (req, res) => {
+  const grade = req.params.grade;
+  const { roleID } = req;
+  if (roleID < 2) {
+    console.log(`user not allowed to access`);
+  } else {
+    studentModel.getStudentGradeLevel(grade).then(response => {
+      console.log(response);
+      res.json({ response })
+    })
+  }
+})
+
 router.get('/checkout/:userID', (req, res) => {
   const { roleID } = req;
   const userID = req.params.userID;

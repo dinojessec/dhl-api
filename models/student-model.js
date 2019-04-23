@@ -48,7 +48,6 @@ const student = {
           resolve(results);
         }
       });
-      // resolve(sql);
     }); // end of promise
   },
 
@@ -58,8 +57,8 @@ const student = {
       SELECT PersonalDataSheet.*, Student.*, Father.*, Mother.*, Education.*, Address.*, Voucher.*, Uniform.*, User.*,
         TIMESTAMPDIFF(YEAR,birthday,CURDATE()) AS age,
         DATE_FORMAT(birthday,'%Y/%m/%d') AS birthday,
-        DATE_FORMAT(jhsYear,'%Y-%M') AS formattedJhsYear,
-        DATE_FORMAT(elemYear,'%Y-%M') AS formattedElemYear
+        DATE_FORMAT(jhsYear,'%Y/%m/%d') AS jhsYear,
+        DATE_FORMAT(elemYear,'%Y/%m/%d') AS elemYear
           FROM User
           LEFT OUTER JOIN Student
             ON Student.userID = User.userID
@@ -130,7 +129,7 @@ const student = {
     return new Promise(resolve => {
       const sql = `SELECT *,
                     TIMESTAMPDIFF(YEAR,birthday,CURDATE()) AS age,
-                    DATE_FORMAT(jhsYear,'%Y-%M') AS formattedJhsYear
+                    DATE_FORMAT(jhsYear,'%Y-%M-%d') AS formattedJhsYear
                       FROM Student
                         LEFT JOIN jhsGrades
                           ON Student.personalDataSheetID = jhsGrades.personalDataSheetID
@@ -189,6 +188,26 @@ const student = {
           resolve(result);
         }
       })
+    })
+  },
+
+  getStudentGradeLevel(grade) {
+    return new Promise((resolve) => {
+      const sql = `SELECT *,
+                    TIMESTAMPDIFF(YEAR,birthday,CURDATE()) AS age
+                    FROM Student 
+                      LEFT JOIN Strand
+                        ON Student.strandID = Strand.strandID
+                      LEFT JOIN Education
+                        ON Student.personalDataSheetID = Education.personalDataSheetID
+                    WHERE Student.roleID = 1 AND Student.gradeLevel = '${grade}'`;
+      connection.query(sql, (err, result) => {
+        if (err) {
+          console.log('getstudent grade error', err);
+        } else {
+          resolve(result);
+        }
+      });
     })
   }
 

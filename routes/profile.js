@@ -70,11 +70,10 @@ router.put('/:userID', (req, res) => {
 
           educationModel.updateEducation(params).then(educationTable => {
 
-            console.log(educationTable);
-            // jhsModel.updateGrades(grades, params).then(jhsTable => {
-            //   console.log(jhsTable);
-            //   res.json({ studentTable, addressTable, fatherTable, motherTable, educationTable, jhsTable });
-            // })
+            jhsModel.updateGrades(grades, params).then(jhsTable => {
+              console.log(jhsTable);
+              res.json({ studentTable, addressTable, fatherTable, motherTable, educationTable, jhsTable });
+            })
           });
         });
       });

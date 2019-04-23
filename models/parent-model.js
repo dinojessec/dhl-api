@@ -12,6 +12,12 @@ const parent = {
     return sql;
   },
 
+  addGuardian(pdsID) {
+    const sql = `INSERT INTO Guardian(personalDataSheetID, guardianID) VALUES (${pdsID}, NULL)`;
+
+    return sql;
+  },
+
   addMother(pdsID) {
     const sql = `INSERT INTO Mother(personalDataSheetID, motherID) VALUES(${pdsID}, NULL)`;
 

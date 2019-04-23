@@ -177,12 +177,27 @@ router.post('/', (req, res) => {
                                                                   } else {
                                                                     const jhsGradesID = jhsResult.insertId;
                                                                     console.log('jhs GradesID', jhsGradesID);
-                                                                    res.json({
-                                                                      message:
-                                                                        'Account Created. Please log-in to your account',
-                                                                      status: 200,
-                                                                    });
-                                                                    connection.commit();
+
+                                                                    const guardianQuery = parentModel.addGuardian(pdsID);
+                                                                    connection.query(guardianQuery, (guardianErr, guardianResult) => {
+                                                                      if (guardianErr) {
+                                                                        connection.rollback();
+                                                                        res.json({
+                                                                          message:
+                                                                            'Uniform query error',
+                                                                          status: 404,
+                                                                        });
+                                                                      } else {
+                                                                        const guardianID = guardianResult.insertId;
+                                                                        console.log(guardianID);
+                                                                        res.json({
+                                                                          message:
+                                                                            'Account Created. Please log-in to your account',
+                                                                          status: 200,
+                                                                        });
+                                                                        connection.commit();
+                                                                      }
+                                                                    })
                                                                   }
                                                                 });
                                                               }

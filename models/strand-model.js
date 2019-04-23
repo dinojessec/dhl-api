@@ -70,6 +70,28 @@ const strand = {
       });
     });
   },
+
+  getStrand(strandID) {
+    return new Promise((resolve) => {
+      const sql = `SELECT *,
+                    TIMESTAMPDIFF(YEAR,birthday,CURDATE()) AS age
+                    FROM Student 
+                      LEFT JOIN Strand
+                        ON Student.strandID = Strand.strandID
+                      LEFT JOIN Education
+                        ON Student.personalDataSheetID = Education.personalDataSheetID
+                    WHERE Student.roleID = 1 AND Student.strandID = ${strandID}`;
+
+      connection.query(sql, (err, result) => {
+        if (err) {
+          console.log('error getting all student strand', err);
+        } else {
+          resolve(result);
+        }
+      });
+      // resolve(sql);
+    })
+  }
 };
 
 module.exports = strand;

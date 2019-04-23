@@ -22,21 +22,28 @@ const grades = {
             }
             sql += ` WHERE personalDataSheetID = ${params.personalDataSheetID}`
 
-            // connection.query(sql, (err, results) => {
-            //     if (err) {
-            //         console.log('error on updating grades**', err);
-            //     } else {
-            //         resolve(results);
-            //     }
-            // });
-            console.log(sql);
-            resolve(sql);
+            connection.query(sql, (err, results) => {
+                if (err) {
+                    console.log('error on updating grades**', err);
+                } else {
+                    resolve(results);
+                }
+            });
+            // console.log(sql);
+            // resolve(sql);
         })
     },
 
     getGrades(pdsID) {
         return new Promise((resolve) => {
-            const sql = `SELECT * FROM jhsGrades WHERE personalDataSheetID = ${pdsID};`;
+            const sql = `SELECT *,
+                            SUM((math1 + math2 + math3 + math4)/4) AS mathFinal,
+                            SUM((english1 + english2 + english3 + english4)/4) AS englishFinal,
+                            SUM((filipino1 + filipino2 + filipino3 + filipino4)/4) AS filipinoFinal,
+                            SUM((science1 + science2 + science3 + science4)/4) AS scienceFinal
+                                FROM dhl_dev.jhsGrades
+                                    WHERE personalDataSheetID = 1
+                            GROUP BY jhsGradesID`;
 
             connection.query(sql, (err, result) => {
                 if (err) {
