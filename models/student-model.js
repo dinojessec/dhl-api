@@ -31,7 +31,6 @@ const student = {
                         landlineNumber = ${params.landlineNumber},
                         birthday = '${params.birthday}',
                         gender = '${params.gender}',
-                        guardian = '${params.guardian}',
                         religion = '${params.religion}',
                         motherTongue = '${params.motherTongue}',
                         ethnicGroup = '${params.ethnicGroup}',
@@ -54,7 +53,7 @@ const student = {
   getStudent(userID) {
     return new Promise((resolve, reject) => {
       const sql = `
-      SELECT PersonalDataSheet.*, Student.*, Father.*, Mother.*, Education.*, Address.*, Voucher.*, Uniform.*, User.*,
+      SELECT PersonalDataSheet.*, Student.*, Father.*, Mother.*, Guardian.*, Education.*, Address.*, Voucher.*, Uniform.*, User.*,
         TIMESTAMPDIFF(YEAR,birthday,CURDATE()) AS age,
         DATE_FORMAT(birthday,'%Y/%m/%d') AS birthday,
         DATE_FORMAT(jhsYear,'%Y/%m/%d') AS jhsYear,
@@ -68,6 +67,8 @@ const student = {
             ON PersonalDataSheet.personalDataSheetID = Father.personalDataSheetID
           LEFT OUTER JOIN Mother
             ON PersonalDataSheet.personalDataSheetID = Mother.personalDataSheetID
+          LEFT OUTER JOIN Guardian
+            ON PersonalDataSheet.personalDataSheetID = Guardian.personalDataSheetID
           LEFT OUTER JOIN Address
             ON PersonalDataSheet.personalDataSheetID = Address.personalDataSheetID
           LEFT OUTER JOIN Education
