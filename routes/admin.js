@@ -49,7 +49,7 @@ router.get('/student', (req, res) => {
     console.log(`user notallowed to access`);
   } else {
     studentModel.getAllStudent().then(response => {
-      console.log(response);
+      // console.log(response);
       res.json({ response });
     })
   }
@@ -58,13 +58,13 @@ router.get('/student', (req, res) => {
 // get student based on strand
 router.get('/student/strand/:strandID', (req, res) => {
   const strandID = req.params.strandID;
-  console.log('strand id =======', strandID);
+  // console.log('strand id =======', strandID);
   const { roleID } = req;
   if (roleID < 2) {
     console.log(`user not allowed to access`);
   } else {
     strandModel.getStrand(strandID).then(response => {
-      console.log(response);
+      // console.log(response);
       res.json({ response });
     })
   }

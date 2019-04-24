@@ -33,18 +33,22 @@ router.get('/:userID', (req, res) => {
       .then((studentQuery) => {
         // console.log(studentQuery);
         const studentStrand = studentQuery[0].strandID;
-        if (studentStrand !== null) {
+        if (studentStrand !== undefined) {
           strandModel.getStudentStrand(studentStrand).then((studentStrandQuery) => {
-            const strandResult = studentStrandQuery[0].strandName;
-            res.json({
-              info: studentQuery,
-              strandResult,
-              userID,
-              roleID,
-            });
+            const strandResult = studentStrandQuery[0];
+            if (strandResult === undefined) {
+              res.json({ info: studentQuery, userID, roleID });
+            } else {
+              res.json({
+                info: studentQuery,
+                strandResult,
+                userID,
+                roleID,
+              });
+            }
           });
         } else {
-          res.json({ info: studentQuery, userID, roleID });
+          console.log('failed get query on profile');
         }
       })
       .catch((err) => {
@@ -68,12 +72,15 @@ router.put('/:userID', (req, res) => {
 
         parentModel.updateMother(params).then(motherTable => {
 
-          educationModel.updateEducation(params).then(educationTable => {
+          parentModel.updateGuardian(params).then(guardianTable => {
 
-            jhsModel.updateGrades(grades, params).then(jhsTable => {
-              console.log(jhsTable);
-              res.json({ studentTable, addressTable, fatherTable, motherTable, educationTable, jhsTable });
-            })
+            educationModel.updateEducation(params).then(educationTable => {
+
+              jhsModel.updateGrades(grades, params).then(jhsTable => {
+
+                res.json({ studentTable, addressTable, fatherTable, motherTable, guardianTable, educationTable, jhsTable });
+              })
+            });
           });
         });
       });
