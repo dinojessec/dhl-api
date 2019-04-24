@@ -6,31 +6,31 @@ const grades = {
 
     updateGrades(grades, params) {
         return new Promise((resolve) => {
-            let sql = `UPDATE jhsGrades SET `
+            if (grades !== undefined) {
+                let sql = `UPDATE jhsGrades SET `
 
-            let obj = Object.keys(grades);
-            let objVal = Object.values(grades);
-            const end = Object.keys(grades).length - 1;
-            for (let i = 0; i <= end; i++) {
-                let key = obj[i];
-                let value = objVal[i];
-                if (i === end) {
-                    sql += ` ${key} = ${value}`;
-                } else {
-                    sql += ` ${key} = ${value},`;
+                let obj = Object.keys(grades);
+                let objVal = Object.values(grades);
+                const end = Object.keys(grades).length - 1;
+                for (let i = 0; i <= end; i++) {
+                    let key = obj[i];
+                    let value = objVal[i];
+                    if (i === end) {
+                        sql += ` ${key} = ${value}`;
+                    } else {
+                        sql += ` ${key} = ${value},`;
+                    }
                 }
+                sql += ` WHERE personalDataSheetID = ${params.personalDataSheetID}`
+
+                connection.query(sql, (err, results) => {
+                    if (err) {
+                        console.log('error on updating grades**', err);
+                    } else {
+                        resolve(results);
+                    }
+                });
             }
-            sql += ` WHERE personalDataSheetID = ${params.personalDataSheetID}`
-
-            connection.query(sql, (err, results) => {
-                if (err) {
-                    console.log('error on updating grades**', err);
-                } else {
-                    resolve(results);
-                }
-            });
-            // console.log(sql);
-            // resolve(sql);
         })
     },
 
