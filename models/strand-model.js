@@ -15,7 +15,7 @@ const strand = {
 
   addStrand(params) {
     return new Promise((resolve) => {
-      const sql = `INSERT INTO Strand(strandID, strandName) VALUES(NULL, '${params.strandName}')`;
+      const sql = `INSERT INTO Strand(strandID, strandName, strandCode) VALUES(NULL, '${params.strandName}', '${params.strandCode}')`;
 
       connection.query(sql, (err, result) => {
         if (typeof result !== 'undefined') {
