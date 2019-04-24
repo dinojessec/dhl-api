@@ -88,6 +88,39 @@ const parent = {
       // resolve(sql);
     });
   },
+
+  updateGuardian(params) {
+    return new Promise(resolve => {
+      const sql = `UPDATE Guardian
+      SET 
+         guardianName = '${params.guardianName}',
+         relationship = '${params.relationship}',
+         guardianHomeNumber = '${params.guardianHomeNumber}',
+         guardianStreetName = '${params.guardianStreetName}',
+         guardianBarangay = '${params.guardianBarangay}',
+         guardianTown = '${params.guardianTown}',
+         guardianCity = '${params.guardianCity}',
+         guardianOccupation = '${params.guardianOccupation}',
+         guardianEmployer = '${params.guardianEmployer}',
+         guardianEmployerAddress = '${params.guardianEmployerAddress}',
+         guardianEducationalAttainment = '${params.guardianEducationalAttainment}',
+         guardianSchoolGraduated = '${params.guardianSchoolGraduated}',
+         guardianReligion = '${params.guardianReligion}',
+         guardianMobileNumber = ${params.guardianMobileNumber},
+         guardianLandlineNumber = ${params.guardianLandlineNumber}
+      WHERE
+          personalDataSheetID = ${params.personalDataSheetID}`;
+
+      connection.query(sql, (err, result) => {
+        if (err) {
+          console.log('error on update guardian', err);
+        } else {
+          resolve(result)
+        }
+      })
+
+    })
+  }
 };
 
 module.exports = parent;
