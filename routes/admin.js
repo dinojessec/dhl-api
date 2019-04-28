@@ -4,6 +4,7 @@ const router = express.Router();
 
 const strandModel = require('../models/strand-model');
 const studentModel = require('../models/student-model');
+const jhsModel = require('../models/jhs-grades');
 
 router.get('/strand', (req, res) => {
   const { roleID } = req;
@@ -50,9 +51,13 @@ router.get('/student', (req, res) => {
   } else {
     studentModel.getAllStudent().then(response => {
       // console.log(response);
-      res.json({ response });
+      jhsModel.getGrades().then(gradesRes => {
+        // console.log(res);
+        res.json({ response, gradesRes });
+      })
     })
   }
+
 });
 
 // get student based on strand
@@ -78,6 +83,18 @@ router.get('/student/gradelevel/:grade', (req, res) => {
   } else {
     studentModel.getStudentGradeLevel(grade).then(response => {
       console.log(response);
+      res.json({ response })
+    })
+  }
+})
+// get student based on age
+router.get('/student/age', (req, res) => {
+  const { roleID } = req;
+  if (roleID < 2) {
+    console.log(`user not allowed to access`);
+  } else {
+    studentModel.getStudentByAge().then(response => {
+      console.log('response ========', response[0]);
       res.json({ response })
     })
   }
