@@ -33,23 +33,27 @@ router.get('/:userID', (req, res) => {
       .then((studentQuery) => {
         // console.log(studentQuery);
         const studentStrand = studentQuery[0].strandID;
-        if (studentStrand !== undefined) {
-          strandModel.getStudentStrand(studentStrand).then((studentStrandQuery) => {
-            const strandResult = studentStrandQuery[0];
-            if (strandResult === undefined) {
-              res.json({ info: studentQuery, userID, roleID });
-            } else {
-              res.json({
-                info: studentQuery,
-                strandResult,
-                userID,
-                roleID,
-              });
-            }
-          });
-        } else {
-          console.log('failed get query on profile');
-        }
+        const studentID = studentQuery[0].studentID;
+        jhsModel.getGrades(studentID).then(gradesQuery => {
+          if (studentStrand !== undefined) {
+            strandModel.getStudentStrand(studentStrand).then((studentStrandQuery) => {
+              const strandResult = studentStrandQuery[0];
+              if (strandResult === undefined) {
+                res.json({ info: studentQuery, userID, roleID });
+              } else {
+                res.json({
+                  info: studentQuery,
+                  strandResult,
+                  gradesQuery,
+                  userID,
+                  roleID,
+                });
+              }
+            });
+          } else {
+            console.log('failed get query on profile');
+          }
+        })
       })
       .catch((err) => {
         console.log(err);
@@ -57,7 +61,6 @@ router.get('/:userID', (req, res) => {
   }
 });
 
-// still pending. update student info still not working
 router.put('/:userID', (req, res) => {
   // const userID = req.params.userID;
   const params = req.body;
@@ -85,6 +88,25 @@ router.put('/:userID', (req, res) => {
         });
       });
     });
+  });
+
+});
+
+router.post('/jhsgrades/:studentID', (req, res) => {
+  const studentID = req.params.studentID;
+  const params = req.body;
+
+  jhsModel.postGrades(params, studentID).then(response => {
+    // console.log(response);
+    res.json({ response });
+  })
+});
+
+router.put('/jhsgrades/:studentID', (req, res) => {
+  const studentID = req.params.studentID;
+  const params = req.body;
+  jhsModel.removeGrade(params, studentID).then(response => {
+    console.log(response);
   });
 
 });
