@@ -38,6 +38,7 @@ router.get('/:userID', (req, res) => {
           if (studentStrand !== undefined) {
             strandModel.getStudentStrand(studentStrand).then((studentStrandQuery) => {
               const strandResult = studentStrandQuery[0];
+              // console.log(strandResult);
               if (strandResult === undefined) {
                 res.json({ info: studentQuery, userID, roleID });
               } else {
