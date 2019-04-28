@@ -36,7 +36,8 @@ const student = {
                         ethnicGroup = '${params.ethnicGroup}',
                         referredBy = '${params.referredBy}',
                         preferredShift = '${params.preferredShift}',
-                        preferredCourse = '${params.preferredCourse}'
+                        preferredCourse = '${params.preferredCourse}',
+                        jhs_average = ${params.average}
                     WHERE
                         userID = ${params.userID}`;
 
@@ -77,8 +78,7 @@ const student = {
             ON PersonalDataSheet.personalDataSheetID = Voucher.personalDataSheetID
           LEFT OUTER JOIN Uniform
             ON PersonalDataSheet.personalDataSheetID = Uniform.personalDataSheetID
-          LEFT OUTER JOIN jhsGrades
-            ON PersonalDataSheet.personalDataSheetID = jhsGrades.personalDataSheetID
+
           WHERE User.userID = ${userID}
       `;
 
@@ -132,8 +132,6 @@ const student = {
                     TIMESTAMPDIFF(YEAR,birthday,CURDATE()) AS age,
                     DATE_FORMAT(jhsYear,'%Y-%M-%d') AS formattedJhsYear
                       FROM Student
-                        LEFT JOIN jhsGrades
-                          ON Student.personalDataSheetID = jhsGrades.personalDataSheetID
                         LEFT JOIN Education
                           ON Student.personalDataSheetID = Education.personalDataSheetID
                         LEFT JOIN Strand 
@@ -209,6 +207,27 @@ const student = {
           resolve(result);
         }
       });
+    })
+  },
+
+  getStudentByAge() {
+    return new Promise(resolve => {
+      const sql = `SELECT *, TIMESTAMPDIFF(YEAR,birthday,CURDATE()) AS age 
+                        FROM Student
+                        LEFT JOIN Strand
+                        ON Student.strandID = Strand.strandID
+                      LEFT JOIN Education
+                        ON Student.personalDataSheetID = Education.personalDataSheetID
+                        WHERE Student.roleID = 1 
+                        ORDER BY age ASC`;
+
+      connection.query(sql, (err, result) => {
+        if (err) {
+          console.log('error getting student by age', err);
+        } else {
+          resolve(result);
+        }
+      })
     })
   }
 
