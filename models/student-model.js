@@ -55,7 +55,7 @@ const student = {
     return new Promise((resolve, reject) => {
       const sql = `
       SELECT PersonalDataSheet.*, Student.*, Father.*, Mother.*, Guardian.*, Education.*, Address.*, Voucher.*, Uniform.*, User.*,
-        TIMESTAMPDIFF(YEAR,birthday,CURDATE()) AS age,
+        TIMESTAMPDIFF(YEAR,birthday,CURDATE()) AS Age,
         DATE_FORMAT(birthday,'%Y/%m/%d') AS birthday,
         DATE_FORMAT(jhsYear,'%Y/%m/%d') AS jhsYear,
         DATE_FORMAT(elemYear,'%Y/%m/%d') AS elemYear
@@ -129,7 +129,9 @@ const student = {
   getAllStudent() {
     return new Promise(resolve => {
       const sql = `SELECT *,
-                    TIMESTAMPDIFF(YEAR,birthday,CURDATE()) AS age,
+                    CONCAT('/profile/', userID) AS path,
+                    CONCAT(firstName, ' ', middleName, ' ', lastName) AS Fullname,
+                    TIMESTAMPDIFF(YEAR,birthday,CURDATE()) AS Age,
                     DATE_FORMAT(jhsYear,'%Y-%M-%d') AS formattedJhsYear
                       FROM Student
                         LEFT JOIN Education
