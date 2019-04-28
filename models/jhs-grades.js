@@ -34,22 +34,66 @@ const grades = {
         })
     },
 
-    getGrades(pdsID) {
+    getGrades(studentID) {
         return new Promise((resolve) => {
-            const sql = `SELECT *,
-                            SUM((math1 + math2 + math3 + math4)/4) AS mathFinal,
-                            SUM((english1 + english2 + english3 + english4)/4) AS englishFinal,
-                            SUM((filipino1 + filipino2 + filipino3 + filipino4)/4) AS filipinoFinal,
-                            SUM((science1 + science2 + science3 + science4)/4) AS scienceFinal
-                                FROM dhl_dev.jhsGrades
-                                    WHERE personalDataSheetID = 1
-                            GROUP BY jhsGradesID`;
+            const sql = `SELECT Student.studentID, jhs_grades.*
+                            FROM Student
+                                LEFT JOIN student_jhs_grade
+                                    ON student_jhs_grade.studentID = Student.studentID
+                                LEFT JOIN jhs_grades
+                                    ON jhs_grades.jhs_grade_id = student_jhs_grade.jhs_grade_id`;
 
             connection.query(sql, (err, result) => {
                 if (err) {
                     console.log('error on getting grades**', err);
                 } else {
                     resolve(result)
+                }
+            });
+        })
+    },
+
+    postGrades(params, studentID) {
+        return new Promise(resolve => {
+            const sql = `INSERT INTO jhs_grades (
+                                        jhs_subject,
+                                        jhs_first_grade,
+                                        jhs_second_grade,
+                                        jhs_third_grade,
+                                        jhs_fourth_grade,
+                                        jhs_final_grade,
+                                        )
+                                VALUES (
+                                    '${params.subject}',
+                                    ${params.first},
+                                    ${params.second},
+                                    ${params.third},
+                                    ${params.fourth},
+                                     ${params.final},
+                                     );
+                        SET @last_insert_id = LAST_INSERT_ID();
+                        INSERT INTO student_jhs_grade(studentID, jhs_grade_id) 
+                            VALUES (${studentID}, @last_insert_id)`;
+
+            connection.query(sql, (err, result) => {
+                if (err) {
+                    console.log('post grades error', err);
+                } else {
+                    resolve(result)
+                }
+            });
+        })
+    },
+
+    removeGrade(params, studentID) {
+        return new Promise(resolve => {
+            const sql = `DELETE FROM jhs_grades WHERE jhs_grade_id = ${params.jhs_grade_id}`;
+
+            connection.query(sql, (err, result) => {
+                if (err) {
+                    console.log('error removing grade', err);
+                } else {
+                    resolve(result);
                 }
             });
         })
