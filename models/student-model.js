@@ -130,6 +130,7 @@ const student = {
     return new Promise(resolve => {
       const sql = `SELECT *,
                     CONCAT('/profile/', userID) AS path,
+                    CONCAT('/admin/checkout/', userID) AS checkout,
                     CONCAT(firstName, ' ', middleName, ' ', lastName) AS Fullname,
                     TIMESTAMPDIFF(YEAR,birthday,CURDATE()) AS Age,
                     DATE_FORMAT(jhsYear,'%Y-%M-%d') AS formattedJhsYear
