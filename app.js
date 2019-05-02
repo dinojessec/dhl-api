@@ -35,6 +35,7 @@ const selectstrand = require('./routes/selectstrand');
 const selectgradelevel = require('./routes/selectgradelevel');
 const changePassword = require('./routes/change-password');
 const user = require('./routes/user');
+const payment = require('./routes/payment');
 
 // uncomment after placing your favicon in /public
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -89,6 +90,7 @@ app.use('/api/v1/register', register);
 app.use('/api/v1/profile', verifier, profile);
 app.use('/api/v1/login', login);
 app.use('/api/v1/admin', verifier, admin);
+app.use('/api/v1/payment', verifier, payment);
 app.use('/api/v1/selectstrand', verifier, selectstrand);
 app.use('/api/v1/selectgradelevel', verifier, selectgradelevel);
 app.use('/api/v1/changepassword', verifier, changePassword);

@@ -10,6 +10,7 @@ const parentModel = require('../models/parent-model');
 const educationModel = require('../models/education-model');
 const voucherModel = require('../models/voucher-model');
 const jhsModel = require('../models/jhs-grades');
+const paymentModel = require('../models/payment-model');
 
 // load strand list
 router.get('/strand', (req, res) => {
@@ -147,7 +148,11 @@ router.get('/student-payment/:userID', (req, res) => {
     const pdsID = response[0].personalDataSheetID;
     voucherModel.getVoucher(pdsID).then(response => {
       const voucherRes = response[0];
-      res.json({ voucherRes });
+      paymentModel.getPayment(voucherRes).then(paymentResponse => {
+        const paymentRes = paymentResponse[0];
+        res.json({ voucherRes, paymentRes });
+        console.log(voucherRes, paymentRes);
+      })
     });
   });
 });
