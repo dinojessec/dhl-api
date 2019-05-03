@@ -127,35 +127,49 @@ router.put('/:userID/approve', (req, res) => {
   })
 });
 
-router.put('/student-payment/:userID', (req, res) => {
-  const userID = req.params.userID;
-  const data = req.body.data;
-  studentModel.getPdsID(userID).then(response => {
-    const pdsID = response[0].personalDataSheetID;
-    educationModel.getSchoolType(pdsID).then(response => {
-      const type = response[0].schoolType;
-      voucherModel.updateVoucher(type, data, pdsID).then(response => {
-        res.json({ response });
-      });
-    })
-  })
-});
+// router.put('/student-payment/:userID', (req, res) => {
+//   const userID = req.params.userID;
+//   const data = req.body.data;
+//   console.log(data, 'data from frontend')
+//   studentModel.getPdsID(userID).then(response => {
+//     const pdsID = response[0].personalDataSheetID;
+//     educationModel.getSchoolType(pdsID).then(response => {
+//       const type = response[0].schoolType;
+//       voucherModel.updateVoucher(type, data, pdsID).then(response => {
+//         res.json({ response });
+//       });
+//     })
+//   })
+// });
 
 router.get('/student-payment/:userID', (req, res) => {
   const userID = req.params.userID;
 
-  studentModel.getPdsID(userID).then(response => {
-    const pdsID = response[0].personalDataSheetID;
-    voucherModel.getVoucher(pdsID).then(response => {
-      const voucherRes = response[0];
-      paymentModel.getPayment(voucherRes).then(paymentResponse => {
-        const paymentRes = paymentResponse[0];
-        res.json({ voucherRes, paymentRes });
-        console.log(voucherRes, paymentRes);
+  paymentModel.getStudentID(userID).then(resUserID => {
+    const studentID = resUserID[0].studentID;
+    const tuition = resUserID[0].tuition;
+    paymentModel.getPayment(studentID).then(responsePayment => {
+      const resPayment = responsePayment;
+      paymentModel.getTotalAmount(studentID).then(resAmount => {
+        const totalAmount = resAmount[0].total;
+        console.log(totalAmount);
+        res.json({ resPayment, tuition, totalAmount });
       })
-    });
-  });
+    })
+  })
 });
+
+router.post('/student-payment/:userID', (req, res) => {
+  const userID = req.params.userID;
+  const params = req.body.data;
+  console.log(params)
+  paymentModel.getStudentID(userID).then(resStudID => {
+    const studentID = resStudID[0].studentID;
+    paymentModel.addPayment(studentID, params).then(resPayment => {
+      console.log(resPayment)
+    })
+  })
+})
 
 
 module.exports = router;

@@ -37,7 +37,8 @@ const student = {
                         referredBy = '${params.referredBy}',
                         preferredShift = '${params.preferredShift}',
                         preferredCourse = '${params.preferredCourse}',
-                        jhs_average = ${params.average}
+                        jhs_average = ${params.average},
+                        schoolType = '${params.schoolType}'
                     WHERE
                         userID = ${params.userID}`;
 
