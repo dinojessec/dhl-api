@@ -4,15 +4,26 @@ const education = {
     return sql;
   },
 
+  getCurrentDate() {
+    let date = new Date();
+    const curDate =
+      date.getFullYear() +
+      "-" +
+      ("0" + (date.getMonth() + 1)).slice(-2) +
+      "-" +
+      ("0" + date.getDate()).slice(-2);
+    return curDate;
+  },
+
   updateEducation(params) {
     return new Promise((resolve) => {
       const sql = `UPDATE Education
                     SET
                       elementary = '${params.elementary}',
-                      elemYear = '${params.elemYear}',
+                      elemYear = '${!params.elemYear ? this.getCurrentDate() : params.elemYear}',
                       elemHonor = '${params.elemHonor}',
                       juniorHighSchool = '${params.juniorHighSchool}',
-                      jhsYear = '${params.jhsYear}',
+                      jhsYear = '${!params.jhsYear ? this.getCurrentDate() : params.jhsYear}',
                       jhsHonor = '${params.jhsHonor}',
                       jhsLocation = '${params.jhsLocation}',
                       schoolType = '${params.schoolType}',

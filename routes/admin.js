@@ -100,6 +100,19 @@ router.get('/student/age', (req, res) => {
   }
 })
 
+router.get('/student/:gender', (req, res) => {
+  const { roleID } = req;
+  const { gender } = req.params;
+  if (roleID < 2) {
+    console.log(`user not allowed to access`);
+  } else {
+    studentModel.getStudentByGender(gender).then(response => {
+      console.log(`response ============ ${response}`)
+      res.json({ response });
+    })
+  }
+})
+
 router.get('/checkout/:userID', (req, res) => {
   const { roleID } = req;
   const userID = req.params.userID;

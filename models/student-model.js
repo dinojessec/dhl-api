@@ -37,7 +37,7 @@ const student = {
                         referredBy = '${params.referredBy}',
                         preferredShift = '${params.preferredShift}',
                         preferredCourse = '${params.preferredCourse}',
-                        jhs_average = ${params.average},
+                        jhs_average = ${params.jhs_average},
                         schoolType = '${params.schoolType}'
                     WHERE
                         userID = ${params.userID}`;
@@ -197,7 +197,11 @@ const student = {
   getStudentGradeLevel(grade) {
     return new Promise((resolve) => {
       const sql = `SELECT *,
-                    TIMESTAMPDIFF(YEAR,birthday,CURDATE()) AS age
+      CONCAT('/profile/', userID) AS path,
+      CONCAT('/admin/checkout/', userID) AS checkout,
+      CONCAT(firstName, ' ', middleName, ' ', lastName) AS Fullname,
+      TIMESTAMPDIFF(YEAR,birthday,CURDATE()) AS Age,
+      DATE_FORMAT(jhsYear,'%Y-%M-%d') AS formattedJhsYear
                     FROM Student 
                       LEFT JOIN Strand
                         ON Student.strandID = Strand.strandID
@@ -216,7 +220,12 @@ const student = {
 
   getStudentByAge() {
     return new Promise(resolve => {
-      const sql = `SELECT *, TIMESTAMPDIFF(YEAR,birthday,CURDATE()) AS age 
+      const sql = `SELECT *,
+      CONCAT('/profile/', userID) AS path,
+                    CONCAT('/admin/checkout/', userID) AS checkout,
+                    CONCAT(firstName, ' ', middleName, ' ', lastName) AS Fullname,
+                    TIMESTAMPDIFF(YEAR,birthday,CURDATE()) AS Age,
+                    DATE_FORMAT(jhsYear,'%Y-%M-%d') AS formattedJhsYear
                         FROM Student
                         LEFT JOIN Strand
                         ON Student.strandID = Strand.strandID
@@ -228,6 +237,31 @@ const student = {
       connection.query(sql, (err, result) => {
         if (err) {
           console.log('error getting student by age', err);
+        } else {
+          resolve(result);
+        }
+      })
+    })
+  },
+
+  getStudentByGender(gender) {
+    return new Promise(resolve => {
+      const sql = `SELECT *,
+      CONCAT('/profile/', userID) AS path,
+      CONCAT('/admin/checkout/', userID) AS checkout,
+      CONCAT(firstName, ' ', middleName, ' ', lastName) AS Fullname,
+      TIMESTAMPDIFF(YEAR,birthday,CURDATE()) AS Age,
+      DATE_FORMAT(jhsYear,'%Y-%M-%d') AS formattedJhsYear
+                    FROM Student 
+                      LEFT JOIN Strand
+                        ON Student.strandID = Strand.strandID
+                      LEFT JOIN Education
+                        ON Student.personalDataSheetID = Education.personalDataSheetID
+                    WHERE Student.roleID = 1 AND Student.gender = '${gender}'`;
+
+      connection.query(sql, (err, result) => {
+        if (err) {
+          console.log('error getting student by gender', err);
         } else {
           resolve(result);
         }

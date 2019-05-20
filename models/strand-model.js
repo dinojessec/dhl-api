@@ -74,7 +74,11 @@ const strand = {
   getStrand(strandID) {
     return new Promise((resolve) => {
       const sql = `SELECT *,
-                    TIMESTAMPDIFF(YEAR,birthday,CURDATE()) AS age
+      CONCAT('/profile/', userID) AS path,
+      CONCAT('/admin/checkout/', userID) AS checkout,
+      CONCAT(firstName, ' ', middleName, ' ', lastName) AS Fullname,
+      TIMESTAMPDIFF(YEAR,birthday,CURDATE()) AS Age,
+      DATE_FORMAT(jhsYear,'%Y-%M-%d') AS formattedJhsYear
                     FROM Student 
                       LEFT JOIN Strand
                         ON Student.strandID = Strand.strandID
