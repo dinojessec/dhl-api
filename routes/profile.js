@@ -171,5 +171,15 @@ router.post('/student-payment/:userID', (req, res) => {
   })
 })
 
+router.put('/student-payment/:userID', (req, res) => {
+  const { userID } = req.params;
+  const params = req.body.data;
+  console.log(`${userID}, ${params}`);
+
+  paymentModel.deletePayment(params).then(deleteResponse => {
+    res.json({ deleteResponse })
+  })
+})
+
 
 module.exports = router;

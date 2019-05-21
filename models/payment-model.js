@@ -110,7 +110,20 @@ const payment = {
         }
       })
     })
+  },
+
+  deletePayment(params) {
+    return new Promise(resolve => {
+      const sql = `DELETE FROM student_payment WHERE paymentID = ${params}`;
+
+      connection.query(sql, (err, result) => {
+        if (err) {
+          console.log(`error getting studentID`, err)
+        } else {
+          resolve(result)
+        }
+      })
+    })
   }
 };
-
 module.exports = payment;
